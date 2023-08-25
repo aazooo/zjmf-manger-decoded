@@ -2001,6 +2001,7 @@ class Dcim
 				$postfields["server_group"] = $params["configoptions"]["server_group"];
 				$postfields["os"] = $params["configoptions"]["os"] ?: $params["dcim_os"];
 				$postfields["user_id"] = $this->user_prefix . $params["uid"];
+				$postfields["remote_user_id"] = $params["uid"];
 				$postfields["token"] = configuration("system_token") ?? "";
 				if ($dcim_server["auth"]["enable_ip_custom"] == "on") {
 					$postfields["ip_customid"] = \intval($dcim_server["ip_customid"]);
@@ -2412,6 +2413,7 @@ class Dcim
 			$post_data["id"] = $dcimid;
 			$post_data["hostid"] = $id;
 			$post_data["user_id"] = $this->user_prefix . $product["uid"];
+			$post_data["remote_user_id"] = $product["uid"];
 			$post_data["domainstatus"] = "Active";
 			if ($product["nextduedate"] > 0) {
 				$post_data["expiretime"] = date("Y-m-d H:i:s", $product["nextduedate"]);

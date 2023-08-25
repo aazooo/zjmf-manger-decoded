@@ -39,5 +39,6 @@ think\facade\Route::get("api/product/prodetail", "api/product/proDetail");
 think\facade\Route::get("api/product/list", "api/product/proList");
 think\facade\Route::get("api/product/:id", "api/product/detail");
 think\facade\Route::get("api/product/:id/resource", "api/product/downloadResource");
+think\facade\Route::get("api/product/upgrade_product", "api/product/getUpgradeProduct");
 
 ?>

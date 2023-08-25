@@ -230,7 +230,7 @@ class Shop
 		$this->cart_data = $cart_data;
 		$this->save();
 		if ($checkuot == 1) {
-			$i = count($this->{$cart_data}["products"]) - 1;
+			$i = count($this->cart_data["products"]) - 1;
 		} else {
 			$i = 0;
 			$hook_data = ["pid" => $pid, "serverid" => $serverid, "currencyid" => $currencyid, "configoption" => $configoption, "customfield" => $customfield, "qty" => $qty, "host" => $host, "password" => $password];

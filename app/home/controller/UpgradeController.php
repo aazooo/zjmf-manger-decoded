@@ -258,13 +258,23 @@ class UpgradeController extends CommonController
 				$data["hid"] = $hid;
 				$data["configoptions"] = $configoptions;
 				if (!empty($configoptions) && is_array($configoptions)) {
+					foreach ($configoptions as $k => $v) {
+                        $option = \think\Db::name("product_config_options")->where("id", $k)->find();
+                        if (in_array($option["option_type"], [13, 14])) {
+                            $old_sub = \think\Db::name("host_config_options")->field("optionid,qty")->where("relid", $hid)->where("configid", $k)->find();
+                            if (0 < $old_sub["qty"] && $v < $old_sub["qty"]) {
+                                return jsons(["status" => 400, "msg" => lang("数据盘不可降级")]);
+                            }
+                        }
+                    }
 					cache("upgrade_down_config_" . $hid, $data, 86400);
 					return jsons(["status" => 200, "msg" => lang("SUCCESS MESSAGE")]);
 				} else {
 					return jsons(["status" => 400, "msg" => "配置项非数组"]);
 				}
+			} else {
+				return jsons(["status" => 400, "msg" => lang("ERROR MESSAGE")]);
 			}
-			return jsons(["status" => 400, "msg" => lang("ERROR MESSAGE")]);
 		} catch (\Throwable $e) {
 			return jsons(["status" => 400, "msg" => $e->getMessage()]);
 		}
@@ -294,6 +304,9 @@ class UpgradeController extends CommonController
 				return jsons(["status" => 400, "msg" => "请重新选择配置"]);
 			}
 			$configoptions = $data["configoptions"];
+			if (!$upgrade_logic->checkChange($hid, $configoptions)) {
+                return jsons(["status" => 400, "msg" => lang("请选择配置项")]);
+            }
 			$promo_code = $data["promo_code"] ?? "";
 			$currencyid = isset($params["currencyid"]) ? intval($params["currencyid"]) : "";
 			$uid = request()->uid;
@@ -499,7 +512,7 @@ class UpgradeController extends CommonController
 			$pids = $upgrade_logic->allowUpgradeProducts($oldhost["pid"]);
 			$host_filter = [];
 			foreach ($host as $k => $product) {
-				if ($product["pid"] != $oldhost["pid"] && in_array($product["pid"], $pids)) {
+				if ($product["pid"] != $oldhost["pid"] && in_array($product["pid"], $pids) && (!isset($params["need_pids"]) || isset($params["need_pids"]) && is_array($params["need_pids"]) && in_array($product["pid"], $params["need_pids"]))) {
 					$product_model = new \app\common\model\ProductModel();
 					$cycle = $product_model->getProductCycle($product["pid"], $currency_id, "", "", "", $uid, "", "", $host["flag"], 1);
 					$product["cycle"] = $cycle;

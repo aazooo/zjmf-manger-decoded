@@ -43,23 +43,6 @@ class LogRecordController extends AdminBaseController
 	 */
 	public function getSystemLog(\think\Request $request)
 	{
-		$zjmf_authorize = configuration("zjmf_authorize");
-		if (empty($zjmf_authorize)) {
-			\compareLicense();
-		} else {
-			$_strcode = _strcode($zjmf_authorize, "DECODE", "zjmf_key_strcode");
-			$_strcode = explode("|zjmf|", $_strcode);
-			$authkey = "-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDg6DKmQVwkQCzKcFYb0BBW7N2f\r\nI7DqL4MaiT6vibgEzH3EUFuBCRg3cXqCplJlk13PPbKMWMYsrc5cz7+k08kgTpD4\r\ntevlKOMNhYeXNk5ftZ0b6MAR0u5tiyEiATAjRwTpVmhOHOOh32MMBkf+NNWrZA/n\r\nzcLRV8GU7+LcJ8AH/QIDAQAB\r\n-----END PUBLIC KEY-----";
-			$pu_key = openssl_pkey_get_public($authkey);
-			foreach ($_strcode as $v) {
-				openssl_public_decrypt(base64_decode($v), $de, $pu_key);
-				$de_str .= $de;
-			}
-			$auth = json_decode($de_str, true);
-			if (time() > $auth["last_license_time"] + 86400) {
-				\compareLicense();
-			}
-		}
 		$param = $request->param();
 		$page = isset($param["page"]) ? intval($param["page"]) : config("page");
 		$limit = isset($param["limit"]) ? intval($param["limit"]) : (configuration("NumRecordstoDisplay") ?: config("limit"));

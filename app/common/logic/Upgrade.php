@@ -1764,6 +1764,7 @@ class Upgrade
 		$data["billingcycle_zh"] = config("billing_cycle")[$new_billingcycle];
 		$data["flag"] = !empty($flag) ? 1 : 0;
 		$data["has_renew"] = $this->renewInvoices($hid);
+		$data["new_pid"] = $new_pid;
 		$re["data"] = $data;
 		$re["status"] = 200;
 		$re["msg"] = lang("SUCCESS MESSAGE");

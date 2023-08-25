@@ -318,6 +318,7 @@ class CreditLimitController extends \cmf\controller\HomeBaseController
 		if (!$invoice_id) {
 			return jsonrule(["status" => 400, "msg" => lang("ID_ERROR")]);
 		}
+		$uid = request()->uid;
 		$page = input("get.page", 1, "intval");
 		$limit = input("get.limit", 10, "intval");
 		$order = input("get.order", "id");
@@ -438,6 +439,7 @@ class CreditLimitController extends \cmf\controller\HomeBaseController
 		if (!in_array($sort, ["asc", "desc"])) {
 			$sort = "asc";
 		}
+		$uid = request()->uid;
 		$invoices1 = \think\Db::name("invoices")->field("id")->where("status", "Paid")->where("use_credit_limit", 1)->where("invoice_id", 0)->where("is_delete", 0)->where("uid", $uid)->select()->toArray();
 		$invoices1 = array_column($invoices1, "id");
 		$unpaid = \think\Db::name("invoices")->alias("a")->field("a.id")->leftjoin("invoices b", "b.id=a.invoice_id")->where("b.type", "credit_limit")->where("b.status", "Unpaid")->where("a.is_delete", 0)->where("b.is_delete", 0)->where("b.uid", $uid)->select()->toArray();

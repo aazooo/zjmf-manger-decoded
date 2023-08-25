@@ -30,6 +30,7 @@ class ClientsModel extends \think\Model
 				$result = 0;
 		}
 		$status = 1;
+		$user["password"] = password_decrypt($user["password"]);
 		if (empty($result)) {
 			$data = ["username" => !empty($user["username"]) ? $user["username"] : $user["phonenumber"] ?? substr($user["email"], 0, strpos($user["email"], "@")), "email" => $user["email"] ?? "", "avatar" => $user["avatar"] ?? "用户头像2-" . rand(10, 20) . ".jpg", "phone_code" => $user["phone_code"] ?? "86", "phonenumber" => $user["phonenumber"] ?? "", "currency" => getDefaultCurrencyId(), "password" => !empty($user["password"]) ? cmf_password($user["password"]) : "", "lastloginip" => get_client_ip(0, true), "create_time" => time(), "lastlogin" => time(), "status" => $status, "defaultgateway" => gateway_list()[0]["name"] ?? "", "sale_id" => $user["sale_id"] ?? 0, "qq" => $user["qq"] ?? "", "companyname" => $user["companyname"] ?? "", "address1" => $user["address1"] ?? "", "api_password" => aesPasswordEncode(randStrToPass(12, 0)), "marketing_emails_opt_in" => configuration("marketing_emails_opt_in"), "api_open" => 0];
 			$userId = \think\Db::name("clients")->insertGetId($data);
@@ -77,6 +78,7 @@ class ClientsModel extends \think\Model
 	}
 	public function mobileVerify($user, $is_market = false)
 	{
+		$user["password"] = password_decrypt($user["password"]);
 		$result = $this->where("phonenumber", $user["phonenumber"])->find();
 		if (!empty($result)) {
 			if ($result["status"] != 1) {
@@ -259,6 +261,7 @@ class ClientsModel extends \think\Model
 	}
 	public function emailVerify($user, $is_market = false)
 	{
+		$user["password"] = password_decrypt($user["password"]);
 		$result = $this->where("email", $user["email"])->find();
 		if (!empty($result)) {
 			if ($result["status"] != 1) {

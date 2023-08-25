@@ -286,8 +286,38 @@ class DcimCloud
 	}
 	public function moduleAllowFunction()
 	{
-		return ["createSnap", "deleteSnap", "restoreSnap", "createBackup", "deleteBackup", "restoreBackup", "mountIso", "unmountIso", "setBootOrder", "createSecurityGroup", "delSecurityGroup", "showSecurityRules", "createSecurityRule", "delSecurityRule", "linkSecurityGroup", "addNatAcl", "delNatAcl", "addNatWeb", "delNatWeb", "exitRescue", "remoteInfo"];
+		return ["listSnapBackup", "createSnap", "deleteSnap", "restoreSnap", "createBackup", "deleteBackup", "restoreBackup", "mountIso", "unmountIso", "setBootOrder", "createSecurityGroup", "delSecurityGroup", "showSecurityRules", "createSecurityRule", "delSecurityRule", "linkSecurityGroup", "addNatAcl", "delNatAcl", "addNatWeb", "delNatWeb", "exitRescue", "remoteInfo"];
 	}
+	public function listSnapBackup($id)
+    {
+        $result = ["status" => 200, "msg" => "获取成功", "data" => []];
+        $post = input("post.");
+        $product = \think\Db::name("host")->alias("a")->field("a.serverid,a.dcimid,a.uid,b.api_type,b.zjmf_api_id")->leftJoin("products b", "a.productid=b.id")->where("b.type", "dcimcloud")->where("a.id", $id)->find();
+        if (empty($product)) {
+            return $result;
+        }
+        if ($product["api_type"] == "zjmf_api") {
+            $result = zjmfCurl($product["zjmf_api_id"], "/provision/custom/" . (int) $product["dcimid"], $post);
+        } else {
+            $this->setUrl($product["serverid"]);
+            if ($this->error) {
+                return $result;
+            }
+            if (empty($product["dcimid"])) {
+                return $result;
+            }
+            $res = $this->curl("/clouds/" . $product["dcimid"] . "/snapshots", ["page" => 1, "per_page" => 9999], 30, "GET");
+            $snapshots = $res["data"]["data"] ?? [];
+            foreach ($snapshots as $k => $v) {
+                unset($snapshots[$k]["disk_remarks"]);
+                unset($snapshots[$k]["diskid"]);
+                unset($snapshots[$k]["real_file"]);
+                unset($snapshots[$k]["size"]);
+            }
+            $result["data"] = $snapshots;
+        }
+        return $result;
+    }
 	public function createSnap($id)
 	{
 		$post = input("post.");
@@ -1135,7 +1165,7 @@ class DcimCloud
 				return $result;
 			}
 			$acl_id = input("post.id", 0, "intval");
-			$res = $this->curl("/nat_acl/" . $acl_id . "?hostid=" . $params["dcimid"], [], 30, "DELETE");
+			$res = $this->curl("/nat_acl/" . $acl_id . "?hostid=" . $product["dcimid"], [], 30, "DELETE");
 		}
 		if ($res["status"] == "success" || $res["status"] == 200) {
 			$result["status"] = 200;
@@ -1219,7 +1249,7 @@ class DcimCloud
 				return $result;
 			}
 			$web_id = input("post.id", 0, "intval");
-			$res = $this->curl("/nat_web/" . $web_id . "?hostid=" . $params["dcimid"], [], 30, "DELETE");
+			$res = $this->curl("/nat_web/" . $web_id . "?hostid=" . $product["dcimid"], [], 30, "DELETE");
 		}
 		if ($res["status"] == "success" || $res["status"] == 200) {
 			$result["status"] = 200;
@@ -1664,6 +1694,7 @@ class DcimCloud
 				$result["msg"] = $this->log_prefix_error . $result["msg"];
 				$description = $this->log_prefix_error . sprintf("重装系统发起失败,原因:%s - Host ID:%d", $res["msg"], $id);
 			} else {
+				$result["msg"] .= ",请确认是否有其他任务正在执行";
 				$description = sprintf("重装系统发起失败 - Host ID:%d", $id);
 			}
 		}
@@ -2631,7 +2662,7 @@ class DcimCloud
 				$post_data["data_write_iops_sec"] = $arr[3] > 0 ? \intval($arr[3]) : 0;
 			}
 			if ($post_data["network_type"] == "vpc") {
-				$vpc_data = ["user" => $res["data"]["id"], "sort" => "asc", "per_page" => 1];
+				$vpc_data = ["user" => $res["data"]["id"], "sort" => "desc", "per_page" => 40, "page" => 1];
 				if (!empty($post_data["node"])) {
 					$vpc_data["node"] = $post_data["node"];
 				} elseif (!empty($post_data["node_group"])) {
@@ -2641,7 +2672,17 @@ class DcimCloud
 				}
 				$vpc_network = $this->curl("/vpc_networks", $vpc_data, 30, "GET");
 				if (!empty($vpc_network["data"]["data"][0]["id"])) {
-					$post_data["vpc"] = $vpc_network["data"]["data"][0]["id"];
+					$vpc_network["data"]["data"] = array_filter($vpc_network["data"]["data"], function ($item) {
+                        return count($item["host"] ?? []) <= 250;
+                    });
+                    usort($vpc_network["data"]["data"], function ($a, $b) {
+                        return count($a["host"] ?? []) - count($b["host"] ?? []);
+                    });
+                    if (!empty($vpc_network["data"]["data"][0]["id"])) {
+                        $post_data["vpc"] = $vpc_network["data"]["data"][0]["id"];
+                    } else {
+                        $post_data["vpc_name"] = "VPC-" . randStr(8);
+                    }
 				} else {
 					$post_data["vpc_name"] = "VPC-" . randStr(8);
 				}
@@ -2935,7 +2976,7 @@ class DcimCloud
 			$res_data["msg"] = "流量重置成功";
 		} else {
 			if ($res["http_code"] == 404) {
-				$dcimcloud->curl("/clouds/" . $dcimid, ["tmp_traffic" => 0], 2, "PUT");
+				$this->curl("/clouds/" . $dcimid, ["tmp_traffic" => 0], 2, "PUT");
 				$description = sprintf("流量清零成功 - Host ID:%d", $hostid);
 				$res_data["status"] = 200;
 				$res_data["msg"] = "流量重置成功";

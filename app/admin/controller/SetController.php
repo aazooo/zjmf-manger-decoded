@@ -393,7 +393,7 @@ class SetController extends AdminBaseController
 		}
 		if (@ftp_login($ftp_resource, $param["ftp_backup_username"], $param["ftp_backup_password"])) {
 			if (ftp_chdir($ftp_resource, $param["ftp_backup_destination"])) {
-				ftp_close($conn_id);
+				ftp_close($ftp_resource);
 				if ($param["type"] == "save") {
 					updateConfiguration("daily_ftp_backup_status", 1);
 					updateConfiguration("ftp_backup_hostname", $param["ftp_backup_hostname"]);

@@ -268,7 +268,7 @@ class PluginController extends AdminBaseController
 				foreach ($message_template as $smstemplate) {
 					$deleteCnTemplate = $smstemplate["range_type"] == 0 ? "deleteCnTemplate" : "deleteGlobalTemplate";
 					$sms["template_id"] = $smstemplate["template_id"];
-					zjmfhook(ucfirst($type), "sms", $sms, $deleteCnTemplate);
+					zjmfhook(ucfirst($sms_operator), "sms", $sms, $deleteCnTemplate);
 				}
 				\think\Db::name("message_template")->where("sms_operator", strtolower($plugin["name"]))->delete();
 				\think\Db::name("message_template_link")->where("sms_operator", strtolower($plugin["name"]))->delete();

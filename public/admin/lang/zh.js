@@ -1286,6 +1286,8 @@ const lang_obj = {
   login_page_name: '登录页名称',
   enter_background_img_text: '请输入背景图上的文字，若没有请留空',
   background_img_site: '背景图地址(客户中心注册登录页)',
+  login_encrypt_template: '登录加密模板',
+  seeting_login_encrypt_template: '设置客户中心允许登录密码加密传输的模板',
   images_are_recommended: '推荐使用jpg,png格式的图片',
   enter_background_img_site: '请输入背景图地址，若没有请留空',
   select_theme_template_style: '选择主题模板样式：',

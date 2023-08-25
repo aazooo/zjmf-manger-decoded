@@ -1451,7 +1451,7 @@ class ConfigOptionsController extends AdminBaseController
 		}
 		$validate = new \app\admin\validate\ConfigOptionsValidate();
 		if (!$validate->scene("add_config_option_sub")->check(["option_name" => $param["option_sub_name"]])) {
-			throw new \think\Exception($validate->getError());
+			throw new \think\Exception($validate->getError()[0]);
 		}
 	}
 }

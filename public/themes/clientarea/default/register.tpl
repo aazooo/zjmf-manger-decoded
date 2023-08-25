@@ -5,6 +5,7 @@
 {if $SuccessMsg} 
 {include file="error/notifications" value="$SuccessMsg"}
 {/if}
+<script src="/themes/clientarea/default/assets/js/crypto-js.min.js" type="text/javascript"></script>
 <script src="/themes/clientarea/default/assets/js/public.js?v={$Ver}"></script>
 
 <style>
@@ -96,7 +97,7 @@
 								<div class="tab-content">	
 									{if $Register.allow_register_email}
 									<div id="email" class="tab-pane {if ($Register.allow_register_email && !$Register.allow_register_phone) || $Get.action=="email"}active{/if}" role="tabpanel">
-										<form class="needs-validation" novalidate method="post" action="/register?action=email">
+										<form class="needs-validation" novalidate method="post" action="/register?action=email" onsubmit="encryptPass('phonePwd');encryptPass('phonePwdCheck');" >
 											<div class="form-group">
 												<label for="email">{$Lang.mailbox}</label>
 												<input type="text" class="form-control" id="emailInp" name="email"
@@ -121,12 +122,12 @@
 											<div class="form-group">
 												<label for="password">{$Lang.password}</label>
 												<input type="password" class="form-control" name="password"
-													id="emailPwd" placeholder="{$Lang.please_enter_password}" required>
+													id="phonePwd" placeholder="{$Lang.please_enter_password}" required>
 											</div>
 											<div class="form-group">
 												<label for="checkPassword">{$Lang.confirm_password}</label>
 												<input type="password" class="form-control" name="checkPassword"
-													id="emailPwdCheck" placeholder="{$Lang.please_password_again}" required>
+													id="phonePwdCheck" placeholder="{$Lang.please_password_again}" required>
 											</div>
 											{foreach $Register.login_register_custom_require as $custom}
 											<div class="form-group">
@@ -182,7 +183,7 @@
 									{/if}
 									{if $Register.allow_register_phone}
 									<div id="phone" class="tab-pane {if $Get.action=="phone" || !$Get.action}active{/if}" role="tabpanel">
-										<form class="needs-validation" novalidate method="post" action="/register?action=phone">
+										<form class="needs-validation" novalidate method="post" action="/register?action=phone" onsubmit="encryptPass('emailPwd');encryptPass('emailPwdCheck');">
 											<div class="form-group">
 												<label for="username">{$Lang.phone_number}</label>
 												<div class="input-group">

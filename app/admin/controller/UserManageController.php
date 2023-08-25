@@ -1939,7 +1939,8 @@ class UserManageController extends GetUserController
 				return jsonrule($re);
 			}
 			$files = $this->request->file("idimage");
-			$result = $this->uploadMultiHandle($files);
+			$upload = new \app\common\logic\Upload();
+			$result = $upload->uploadMultiHandle($files);
 			if ($result["status"] == 200) {
 				$addresses = explode(",", $result["savename"]);
 				$certifi["img_one"] = $addresses[0];
@@ -2102,7 +2103,8 @@ class UserManageController extends GetUserController
 				return $re;
 			}
 			$files = $this->request->file("idimage");
-			$result = $this->uploadMultiHandle($files);
+			$upload = new \app\common\logic\Upload();
+			$result = $upload->uploadMultiHandle($files);
 			if ($result["status"] == 200) {
 				$addresses = explode(",", $result["savename"]);
 				$certifi["img_one"] = $addresses[0];

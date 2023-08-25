@@ -6,8 +6,9 @@
 {include file="error/notifications" value="$SuccessMsg"}
 {/if}
   
-  
- <script src="/themes/clientarea/default/assets/js/public.js" type="text/javascript"></script>
+ 
+<script src="/themes/clientarea/default/assets/js/crypto-js.min.js" type="text/javascript"></script>
+<script src="/themes/clientarea/default/assets/js/public.js" type="text/javascript"></script>
 
 <style>
 		.logo.text-center img{height:50px;}
@@ -113,7 +114,7 @@
 								<div class="tab-content">
 									{if $Login.allow_login_email || $Login.allow_id}
 									<div id="email" class="tab-pane  {if ($Login.allow_login_phone==0 && ($Login.allow_login_email == 1  || $Login.allow_id == 1)) || $Get.action=="email"}active{/if}" role="tabpanel">
-										<form method="post" action="/login?action=email">										
+										<form method="post" action="/login?action=email" onsubmit="return encryptPass('emailPwdInp');" >										
 											<div class="form-group">
 												<label for="username">{if $Login.allow_login_email}{$Lang.mailbox}{else}ID{/if}</label>
 												<input type="text" class="form-control" id="emailInp" name="email" value="{$Post.email}" placeholder="{$Lang.please_enter_your}{if $Login.allow_login_email}{$Lang.mailbox}{if $Login.allow_id==1}{$Lang.ors}{/if}{/if}{if $Login.allow_id==1}ID{/if}">
@@ -137,7 +138,7 @@
 												<button class="btn btn-primary py-2 fs-14 btn-block waves-effect waves-light  d-flex justify-content-center align-items-center"
 													type="button"  onclick="loginBefore('email');">{$Lang.sign_in}</button>
 												{else/}
-												<button class="btn btn-primary py-2 fs-14 btn-block waves-effect waves-light  d-flex justify-content-center align-items-center"
+												<button class="btn btn-primary py-2 fs-14 btn-block waves-effect waves-light d-flex justify-content-center align-items-center"
 													type="submit">{$Lang.sign_in}</button>
 												{/if}												
 											</div>
@@ -146,7 +147,7 @@
 									{/if}
 									{if $Login.allow_login_phone}
 									<div id="phone" class="tab-pane {if $Get.action=="phone" || $Get.action=="phone_code" || !$Get.action}active{/if}" role="tabpanel">
-										<form method="post" action="/login?action=phone" >
+										<form method="post" action="/login?action=phone" onsubmit="return encryptPass('phonePwdInp');" >
 											<div class="form-group">
 												<label for="username">{$Lang.phone_number}</label>
 												<div class="input-group">

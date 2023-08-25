@@ -5896,6 +5896,7 @@ ALTER TABLE `shd_products` ADD COLUMN `upstream_auto_setup` varchar(100) NOT NUL
 ALTER TABLE `shd_certifi_log` MODIFY `pic` TEXT COMMENT '图片集合用逗号分割';
 ALTER TABLE `shd_products` ADD COLUMN `upstream_ontrial_status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '上游试用状态:1开启,0未开启';
 ALTER TABLE `shd_clients` ADD COLUMN `send_close` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否关闭发送邮件短信:0否默认，1是';
-UPDATE `shd_configuration` SET `value` = '3.5.4' WHERE `setting` = 'update_last_version';
-UPDATE `shd_configuration` SET `value` = '3.5.4' WHERE `setting` = 'beta_version';
+INSERT INTO `shd_configuration` (`setting`,`value`) VALUES ('allow_new_login_template','default');
+UPDATE `shd_configuration` SET `value` = '3.5.8' WHERE `setting` = 'update_last_version';
+UPDATE `shd_configuration` SET `value` = '3.5.8' WHERE `setting` = 'beta_version';
 ALTER TABLE `shd_upper_reaches_res` ADD COLUMN `mark` VARCHAR(5000) NOT NULL DEFAULT '' COMMENT '备注';

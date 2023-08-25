@@ -815,7 +815,7 @@ class SaleController extends GetUserController
 			$params["time"] = 1;
 		}
 		$record_list = $this->searchSaleRecordInfo("get_list", "", "", $params, false);
-		$record_count = count($record_list);
+		$record_count = $this->searchSaleRecordInfo("get_count", "", "", $params, false);
 		$record_list_stat = $this->searchSaleRecordInfo("get_list", "", "", $params, true);
 		$this_month_sale = $this->get_this_month_sale($record_list_stat);
 		$this_month_commission_total = $this_month_sale["this_month_commission_total"];

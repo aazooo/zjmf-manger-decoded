@@ -66,7 +66,7 @@ class Backup
 			while (($file = readdir($handle)) !== false) {
 				if ($file != "." && $file != "..") {
 					$dir = $move_zip_dir . "/" . $file;
-					is_dir($dir) ? \think\unlinkDir($dir) : unlink($dir);
+					is_dir($dir) ? $this->unlinkDir($dir) : unlink($dir);
 				}
 			}
 			closedir($handle);

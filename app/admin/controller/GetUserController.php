@@ -201,7 +201,7 @@ class GetUserController extends AdminBaseController
 				}
 			}
 		}
-		$data = ["ordercount" => count($rows), "ordercountun" => count($rowsun), "ordercountsum" => count($rowsm), "total" => floatval($sum)];
+		$data = ["ordercount" => count($rows1), "ordercountun" => count($rowsun), "ordercountsum" => count($rowsm), "total" => floatval($sum)];
 		return $data;
 	}
 	/**
@@ -226,6 +226,8 @@ class GetUserController extends AdminBaseController
 	}
 	private function getTimes($time, $str = "paid_time", $start_time = "")
 	{
+		$start_time[0] = $start_time[0] / 1000;
+        $start_time[1] = $start_time[1] / 1000;
 		if ($time == "last_month") {
 			$lastmonth_end = \think\helper\Time::lastMonth();
 			$wheres[] = ["i." . $str, ">=", $lastmonth_end[0]];

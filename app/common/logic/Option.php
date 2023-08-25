@@ -8,6 +8,7 @@ class Option
 	private $system;
 	private $osIco;
 	private $ext = "jpg";
+	private $imageaddress;
 	public function initialize()
 	{
 		$this->allowSystem = config("allow_system");

@@ -80,7 +80,6 @@ think\facade\Route::get($domain . "/munualresource", "admin/ViewResource/munualr
 think\facade\Route::get($domain . "/addOrEditresource", "admin/ViewResource/addOrEditresource");
 think\facade\Route::get($domain . "/upStreamedit", "admin/ViewResource/upStreamedit");
 think\facade\Route::get($domain . "/zjmfapi", "admin/ViewResource/zjmfapi");
-think\facade\Route::any($template . "/[:html]", "admin/View/index");
 think\facade\Route::get($domain . "/login_page", "admin/Public/adPage");
 think\facade\Route::post($domain . "/login", "admin/Public/ad_login");
 think\facade\Route::get($domain . "/get_verify_code", "admin/Public/getVerifyCode");
@@ -299,6 +298,8 @@ think\facade\Route::group($domain, function () {
     think\facade\Route::get("knowledge_base/delete_category/:id", "admin/knowledge_base/deleteCategory");
     think\facade\Route::controller("config_general", "admin/ConfigGeneral");
     think\facade\Route::get("config_general/header", "admin/config_general/getHeader");
+    think\facade\Route::get("config_general/new_login", "admin/config_general/getNewLoginPage");
+    think\facade\Route::post("config_general/new_login", "admin/config_general/postNewLoginPage");
     think\facade\Route::get("config_general/affiliate", "admin/config_general/getAffiliate");
     think\facade\Route::any("config_general/postaffiliate", "admin/config_general/postAffiliate");
     think\facade\Route::get("affladder", "admin/config_general/ladderList");

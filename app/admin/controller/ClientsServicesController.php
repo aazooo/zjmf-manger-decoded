@@ -591,7 +591,7 @@ class ClientsServicesController extends GetUserController
 				$post_data["id"] = $param["dcimid"];
 				$post_data["pid"] = $product_info["upstream_pid"];
 				$post_data["downstream_url"] = request()->domain() . request()->rootUrl();
-				$post_data["downstream_token"] = md5(randStr(16) . time() . $id);
+				$post_data["downstream_token"] = md5(randStr(16) . time() . $param["dcimid"]);
 				$post_data["downstream_id"] = $hostid;
 				$res = zjmfCurl($product_info["zjmf_api_id"], "/host/setdownstream", $post_data);
 				if ($res["status"] == 200) {

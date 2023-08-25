@@ -697,7 +697,7 @@ class CreditLimitController extends AdminBaseController
 			$date[0] = \intval($date[0]);
 			$date[1] = \intval($date[1]);
 			$start = mktime(0, 0, 0, $date[1], 1, $date[0]);
-			$end = mktime(0, 0, 0, $date[1] + 1 > 12 ? 1 : $date[1] + 1, 1, $date[1] + 1 > 12 ? $data[0] + 1 : $date[0]) - 1;
+			$end = mktime(0, 0, 0, $date[1] + 1 > 12 ? 1 : $date[1] + 1, 1, $date[1] + 1 > 12 ? $date[0] + 1 : $date[0]) - 1;
 			$where[] = ["i.due_time", ">=", $start];
 			$where[] = ["i.due_time", "<=", $end];
 		}

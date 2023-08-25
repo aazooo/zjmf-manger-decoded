@@ -16,6 +16,19 @@ class ConfigGeneralController extends AdminBaseController
 		parent::initialize();
 		$this->validate = new \app\admin\validate\ConfigGeneralValidate();
 	}
+	public function getNewLoginPage()
+    {
+        $templates = $this->getOptionClientarea_default_themes();
+        $allow = explode(",", configuration("allow_new_login_template") ?? "");
+        return jsonrule(["status" => 200, "msg" => lang("SUCCESS MESSAGE"), "data" => ["templates" => $templates, "allow_new_login_template" => $allow]]);
+    }
+    public function postNewLoginPage()
+    {
+        $param = $this->request->param();
+        $allow = implode(",", $param["allow_new_login_template"] ?? ["default"]);
+        updateConfiguration("allow_new_login_template", $allow);
+        return jsonrule(["status" => 200, "msg" => lang("SUCCESS MESSAGE")]);
+    }
 	/**
 	 * @title 邮件设置页面
 	 * @description 接口说明:邮件设置页面

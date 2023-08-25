@@ -103,7 +103,7 @@
 </div>
 {if $support_snap}
 <div class="table-responsive">
-  <table class="table mb-0 mt-3">
+  <table class="table mb-0 mt-3" id="snap_table">
     <thead class="thead-light">
       <tr>
         <th>磁盘</th>
@@ -120,8 +120,13 @@
         <td>{$vo.remarks}</td>
         <td style="text-align: center;">{$vo.create_time}</td>
         <td style="text-align: center;">
-          <button type="button" class="btn btn-link restore" data-id="{$vo.id}">恢复</button>
-          <button type="button" class="btn btn-link deleteSnapshot" data-id="{$vo.id}">删除</button>
+          <?php if($vo['status'] == 0){ ?>
+            <!-- 创建中 -->
+            <span>创建中</span>
+          <?php }else{ ?>
+            <button type="button" class="btn btn-link restore" data-id="{$vo.id}">恢复</button>
+            <button type="button" class="btn btn-link deleteSnapshot" data-id="{$vo.id}">删除</button>
+          <?php } ?>
         </td>
       </tr>
       {/if}
@@ -139,7 +144,7 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table mb-0 mt-3">
+  <table class="table mb-0 mt-3" id="backup_table">
     <thead class="thead-light">
       <tr>
         <th>磁盘</th>
@@ -156,8 +161,13 @@
         <td>{$vo.remarks}</td>
         <td style="text-align: center;">{$vo.create_time}</td>
         <td style="text-align: center;">
-          <button type="button" class="btn btn-link restoreBackup" data-id="{$vo.id}">恢复</button>
-          <button type="button" class="btn btn-link deleteBackup" data-id="{$vo.id}">删除</button>
+          <?php if($vo['status'] == 0){ ?>
+            <!-- 创建中 -->
+            <span>创建中</span>
+          <?php }else{ ?>
+            <button type="button" class="btn btn-link restoreBackup" data-id="{$vo.id}">恢复</button>
+            <button type="button" class="btn btn-link deleteBackup" data-id="{$vo.id}">删除</button>
+          <?php } ?>
         </td>
       </tr>
       {/if}
@@ -212,7 +222,7 @@
   }
 
   // 快照表格行内 恢复按钮
-  $('.restore').on('click', function () {
+  $(document).on('click', '.restore', function () {
     if ($(this).data('disabled') == 'true') {
       return;
     }
@@ -256,7 +266,7 @@
   });
 
   // 快照表格行内 删除按钮
-  $('.deleteSnapshot').on('click', function () {
+  $(document).on('click', '.deleteSnapshot', function () {
     if ($(this).data('disabled') == 'true') {
       return;
     }
@@ -299,7 +309,7 @@
     })
   });
   // 备份表格行内 恢复按钮
-  $('.restoreBackup').on('click', function () {
+  $(document).on('click', '.restoreBackup', function () {
     if ($(this).data('disabled') == 'true') {
       return;
     }
@@ -343,7 +353,7 @@
   });
 
   // 备份表格行内 删除按钮
-  $('.deleteBackup').on('click', function () {
+  $(document).on('click', '.deleteBackup', function () {
     if ($(this).data('disabled') == 'true') {
       return;
     }
@@ -447,6 +457,71 @@
       })
     }
   });
+
+
+
+    get_snap_backup_list();
+
+    var get_snap_backup_list_interval = null;
+    function get_snap_backup_list(){
+      ajax({
+          type:"post",
+          url:"{$MODULE_CUSTOM_API}",
+          data:"func=listSnapBackup",
+          success:function(data){
+              var backup_content = '';
+              var snap_content = '';
+              var snap_create = false;
+              var backup_create = false;
+              if(data.status==200){
+                for(let i=0; i<data.data.length; i++){
+                  if(data.data[i].type == 'backup'){
+                    if(data.data[i].status == 0){
+                      backup_create = true;
+                    }
+                    backup_content += '<tr><td>'+ data.data[i].disk_name + '</td>'
+                              + '<td>' + data.data[i].remarks + '</td>'
+                              + '<td style="text-align: center;">' + data.data[i].create_time + '</td>'
+                              + '<td style="text-align: center;">'
+                              + '<button type="button" class="btn btn-link restoreBackup" data-id="'+ data.data[i].id +'">恢复</button>'
+                              + '<button type="button" class="btn btn-link deleteBackup" data-id="'+ data.data[i].id +'">删除</button>'
+                              + '</td></tr>';
+                  }else{
+                    if(data.data[i].status == 0){
+                      snap_create = true;
+                    }
+                    snap_content += '<tr><td>'+ data.data[i].disk_name + '</td>'
+                              + '<td>' + data.data[i].remarks + '</td>'
+                              + '<td style="text-align: center;">' + data.data[i].create_time + '</td>'
+                              + '<td style="text-align: center;">'
+                              + '<button type="button" class="btn btn-link restore" data-id="'+ data.data[i].id +'">恢复</button>'
+                              + '<button type="button" class="btn btn-link deleteSnapshot" data-id="'+ data.data[i].id +'">删除</button>'
+                              + '</td></tr>';
+                  }
+                }
+                if(backup_create || snap_create){
+                  if(!get_snap_backup_list_interval){
+                    get_snap_backup_list_interval = setInterval(get_snap_backup_list, 60000);
+                  }
+                  if(!backup_create){
+                    $('#backup_table tbody').html(backup_content);
+                  }
+                  if(!snap_create){
+                    $('#snap_table tbody').html(snap_content);
+                  }
+                }else{
+                  $('#snap_table tbody').html(snap_content);
+                  $('#backup_table tbody').html(backup_content);
+                  if(get_snap_backup_list_interval){
+                    clearInterval(get_snap_backup_list_interval)
+                  }
+                }
+              }
+          },
+          error:function(){}
+      })
+    }
+
 
   function ajax(options) {
     //创建一个ajax对象

@@ -74,7 +74,7 @@ class Download
 	}
 	public function getCatsProduct($productid)
 	{
-		$cats_data = \think\Db::name("downloadcats")->field("id,parentid,name,description")->order("sort", asc)->select()->toArray();
+		$cats_data = \think\Db::name("downloadcats")->field("id,parentid,name,description")->order("sort", "asc")->select()->toArray();
 		if (!empty($cats_data)) {
 			$product_downloads = \think\Db::name("product_downloads")->field("download_id")->where("product_id", $productid)->select()->toArray();
 			$str = "";

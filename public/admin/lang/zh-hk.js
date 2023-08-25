@@ -1295,6 +1295,8 @@ const lang_obj = {
   login_page_name: '登錄頁名稱',
   enter_background_img_text: '請輸入背景圖上的文字，若沒有請留空',
   background_img_site: '背景圖地址(客戶中心註冊登錄頁)',
+  login_encrypt_template: '登錄加密模板',
+  seeting_login_encrypt_template: '設置客戶中心允許登錄密碼加密傳輸的模板',
   images_are_recommended: '推薦使用jpg,png格式的圖片',
   enter_background_img_site: '請輸入背景圖地址，若沒有請留空',
   select_theme_template_style: '選擇主題模板樣式：',

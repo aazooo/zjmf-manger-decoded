@@ -1287,6 +1287,8 @@ const lang_obj = {
   login_page_name: 'Login page name',
   enter_background_img_text: 'Please enter the text on the background image, if not, please leave it blank',
   background_img_site: 'Background image address (customer center registration login page)',
+  login_encrypt_template: 'Login encryption template',
+  seeting_login_encrypt_template: 'Set up a template for the customer center to allow encrypted transmission of login passwords',
   images_are_recommended: 'Recommended to use jpg, png format pictures',
   enter_background_img_site: 'Please enter the background image address, if not, please leave it blank',
   select_theme_template_style: 'Select theme template style:',

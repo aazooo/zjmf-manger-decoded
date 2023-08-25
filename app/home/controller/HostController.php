@@ -258,7 +258,7 @@ class HostController extends CommonController
 			}
 			if (!empty($hco)) {
 				foreach ($hco as $k => $v) {
-					$a = explode("^", explode("|", $v["option_name"]))[1];
+					$a = explode("^", explode("|", $v["option_name"])[1]);
 					$a1 = explode("|", $v["option_names"]);
 					$hco[$k]["option_name"] = str_replace(" ", "", $a[0]);
 					$hco[$k]["option_names"] = $a1[1];
@@ -528,7 +528,7 @@ class HostController extends CommonController
 		$returndata["server_data"] = "";
 		$provision_logic = new \app\common\logic\Provision();
 		$module_button = $provision_logic->clientButtonOutput($host_id);
-		$module_client_area = $provision_logic->clientArea($hostid);
+		$module_client_area = $provision_logic->clientArea($host_id);
 		$returndata["module_button"] = $module_button;
 		$returndata["module_client_area"] = $module_client_area;
 		$returndata["hook_output"] = hook("client_product_details_output", ["host_id" => $host_id], false);
@@ -554,10 +554,10 @@ class HostController extends CommonController
 			$system_button["product_transfer"] = ["name" => lang("PRODUCT_TRANSFER"), "func" => "product_transfer", "disabled" => false];
 		}
 		if (in_array($domainstatus, ["Active", "Suspended"])) {
-			if ($host_data["payment_type"] == "prepayment" && !in_array($billingcycle, ["onetime", "free", "hour", "day"])) {
+			if ($host_data["payment_type"] == "prepayment" && !in_array($host_data["billingcycle"], ["onetime", "free", "hour", "day"])) {
 				$system_button["renew_cycle"] = ["name" => lang("RENEW"), "func" => "renew_cycle", "disabled" => false];
 			} else {
-				if ($host_data["payment_type"] == "postpaid" || in_array($billingcycle, ["hour", "day"])) {
+				if ($host_data["payment_type"] == "postpaid" || in_array($host_data["billingcycle"], ["hour", "day"])) {
 					$system_button["pay_cycle"] = ["name" => lang("PAYMENT_CURRENT_PERIOD"), "func" => "pay_cycle", "disabled" => false];
 				}
 			}
@@ -1450,9 +1450,17 @@ class HostController extends CommonController
 					$sync_info["ip_num"] = count($sync_info["assignedips"]);
 					$returndata["host_data"] = array_merge($returndata["host_data"], $sync_info);
 				}
+				$filter = [];
+                if (!empty($upstream_data["module_client_area"])) {
+                    foreach ($upstream_data["module_client_area"] as $item) {
+                        if ($item["key"] != "security_groups") {
+                            $filter[] = $item;
+                        }
+                    }
+                }
 				$returndata["module_button"]["control"] = $upstream_data["module_button"]["control"] ?: [];
 				$returndata["module_button"]["console"] = $upstream_data["module_button"]["console"] ?: [];
-				$returndata["module_client_area"] = $upstream_data["module_client_area"] ?: [];
+				$returndata["module_client_area"] = $filter;
 				$returndata["module_chart"] = $upstream_data["module_chart"] ?: [];
 				$returndata["module_client_main_area"] = $upstream_data["module_client_main_area"] ?: [];
 				$returndata["dcimcloud"]["nat_acl"] = $upstream_data["dcimcloud"]["nat_acl"] ?: "";
@@ -1464,7 +1472,7 @@ class HostController extends CommonController
 					return jsons(["status" => 200, "data" => $returndata]);
 				}
 			} elseif ($host_data["api_type"] == "manual") {
-				$UpperReaches = new \app\common\logic\UpperReaches();
+				$UpperReaches = new parent();
 				$returndata["module_power_status"] = $UpperReaches->modulePowerStatus($host_id);
 				$returndata["module_button"] = $UpperReaches->moduleClientButton($host_id);
 				$upper_reaches = \think\Db::name("zjmf_finance_api")->where("id", $host_data["upper_reaches_id"])->find();
@@ -1594,10 +1602,10 @@ class HostController extends CommonController
 			$system_button["product_transfer"] = ["name" => lang("PRODUCT_TRANSFER"), "func" => "product_transfer", "disabled" => false];
 		}
 		if (in_array($domainstatus, ["Active", "Suspended"])) {
-			if ($host_data["payment_type"] == "prepayment" && !in_array($billingcycle, ["onetime", "free", "hour", "day"])) {
+			if ($host_data["payment_type"] == "prepayment" && !in_array($host_data["billingcycle"], ["onetime", "free", "hour", "day"])) {
 				$system_button["renew_cycle"] = ["name" => lang("RENEW"), "func" => "renew_cycle", "disabled" => false];
 			} else {
-				if ($host_data["payment_type"] == "postpaid" || in_array($billingcycle, ["hour", "day"])) {
+				if ($host_data["payment_type"] == "postpaid" || in_array($host_data["billingcycle"], ["hour", "day"])) {
 					$system_button["pay_cycle"] = ["name" => lang("PAYMENT_CURRENT_PERIOD"), "func" => "pay_cycle", "disabled" => false];
 				}
 			}
@@ -2765,9 +2773,15 @@ class HostController extends CommonController
 		}
 		$host_data = \think\Db::name("host")->field("id,domainstatus,productid")->where("id", $id)->where("uid", $uid)->find();
 		if (empty($host_data)) {
+			if ($request->is_api) {
+                return json(["status" => 200, "msg" => "请求成功"]);
+            }
 			return json(["status" => 406, "msg" => "产品未找到"]);
 		}
 		if (!in_array($host_data["domainstatus"], ["Active", "Suspended"])) {
+			if ($request->is_api && $host_data["domainstatus"] == "Deleted") {
+                return json(["status" => 200, "msg" => "请求成功"]);
+            }
 			return json(["status" => 406, "msg" => "产品为已激活或者暂停的产品才能申请取消"]);
 		}
 		$product_data = \think\Db::name("products")->where("id", $host_data["productid"])->find();

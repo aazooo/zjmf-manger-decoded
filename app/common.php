@@ -7773,3 +7773,26 @@ function gateway_list_openapi($module = "gateways", $status = 1)
 	})->order("order", "asc")->order("id", "asc")->select()->toArray();
 	return $rows;
 }
+function password_encrypt($password)
+{
+    $key = config("app.aes.key");
+    $iv = config("app.aes.iv");
+    $data = openssl_encrypt($password, "AES-128-CBC", $key, OPENSSL_RAW_DATA, $iv);
+    $data = base64_encode($data);
+    return $data;
+}
+function password_decrypt($password)
+{
+    $default = ["default"];
+    $allow = explode(",", configuration("allow_new_login_template") ?? "");
+    $use = configuration("clientarea_default_themes") ?? "default";
+    $allow = array_merge($default, $allow);
+    if (!in_array($use, $allow)) {
+        return $password;
+    }
+    $key = config("app.aes.key");
+    $iv = config("app.aes.iv");
+    $encrypted = base64_decode($password);
+    $plainText = openssl_decrypt($encrypted, "AES-128-CBC", $key, OPENSSL_RAW_DATA, $iv);
+    return $plainText;
+}

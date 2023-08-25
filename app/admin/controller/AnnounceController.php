@@ -55,7 +55,7 @@ class AnnounceController extends AdminBaseController
 				\think\Db::name("announce_ments")->where("id", $id)->whereOr("parentid", $id)->delete();
 				\think\Db::commit();
 				return jsonrule(["status" => 200, "msg" => "删除成功"]);
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				\think\Db::rollbakc();
 				return jsonrule(["status" => 406, "msg" => "删除失败"]);
 			}

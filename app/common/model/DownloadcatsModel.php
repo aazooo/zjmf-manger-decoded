@@ -12,7 +12,7 @@ class DownloadcatsModel extends \think\Model
 	}
 	public static function getAllCatesHome()
 	{
-		$cate_data = \think\Db::name("downloadcats")->field("id,name,parentid,description")->where("hidden", 0)->order("sort", asc)->select()->toArray();
+		$cate_data = \think\Db::name("downloadcats")->field("id,name,parentid,description")->where("hidden", 0)->order("sort", "asc")->select()->toArray();
 		return $cate_data;
 	}
 }

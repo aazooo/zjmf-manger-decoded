@@ -413,7 +413,7 @@ class HostController
 			if (isset($tmp["error"])) {
 				return jsonrule(["status" => 400, "msg" => $tmp["error"]]);
 			}
-			$data["attachment"] = implode(",", $ret);
+			$data["attachment"] = implode(",", $tmp);
 		}
 		$data["tid"] = $id;
 		$data["admin_id"] = 1;

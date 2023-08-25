@@ -216,7 +216,7 @@ class ProductController extends \cmf\controller\HomeBaseController
 			}
 			if (!empty($hco)) {
 				foreach ($hco as $k => $v) {
-					$a = explode("^", explode("|", $v["option_name"]))[1];
+					$a = explode("^", explode("|", $v["option_name"])[1]);
 					$a1 = explode("|", $v["option_names"]);
 					$hco[$k]["option_name"] = str_replace(" ", "", $a[0]);
 					$hco[$k]["option_names"] = $a1[1];

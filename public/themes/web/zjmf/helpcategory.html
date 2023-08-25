@@ -1,0 +1,216 @@
+<body id="help-page" class="bg-2">
+    {if empty($setting.web_close_mode_message)}
+{include file="common/header"  title="$helpListCate.catename" keywords="$helpListCate.catename" description="$helpListCate.catename" /}
+{tagdata name="newsCate,newsList,helpCate,helpListCate" /}
+
+  <link rel="stylesheet" href="{$setting.web_view}/assets/css/custom/pages/help.css" />
+  <link rel="stylesheet" href="{$setting.web_view}/assets/css/article.css" />
+  <section class="page-hero tos space2x">
+			    	<div class="container page-hero-text">
+			    		<div class="row">
+			    			<div class="col-sm-6">
+			    				<h2>{$helpListCate.catename}</h2>
+			    				<p class="hero-slogan">专业服务，快人一步</p>
+			    			</div>
+			    		</div>
+			    	</div>
+			</section>
+			
+			
+	<section class="article-section space2x">
+	<div class="container">
+		<div class="row">
+
+
+			
+			<div class="col-xs-12 main-content">
+
+				<div class="row" style="margin-top: 30px;">
+					<div class="col-md-9">
+						<div class="article-content bg-white">
+							<div class="article-header">
+								<h1 class="">{$helpListCate.catename}</h1>
+							</div>
+							<div class="article-body">
+								<ul class="article-list">
+																		
+									
+{if empty($helpListCate.list)} 
+<li class="item">
+										<div class="item-content" style="margin-left: 0;">
+											<h2 class="item-title">
+												<a href="#" title="{$vo.title}">暂无文章</a>
+											</h2>
+											<div class="item-excerpt">
+												<p>此分类下暂无文章</p>
+											</div>
+										</div>
+									</li>
+    
+     
+         {else/}  
+            {foreach $helpListCate.list as $key=>$vo } 
+            <li class="item">
+										<div class="item-content" style="margin-left: 0;">
+											<h2 class="item-title">
+												<a href="/helparticle/{$vo.id}.html" title="{$vo.title}">{$vo.title}</a>
+											</h2>
+											<div class="item-excerpt">
+												<p>{$vo.description}</p>
+											</div>
+											<div class="item-meta">
+												<a class="item-meta-li" href="javascript:;" target="_blank">{$helpListCate.catename}</a>
+												<span class="item-meta-li date">{$vo.create_time}</span>
+												<span class="item-meta-li views" title="阅读数"><i class="fa fa-eye"></i>{$vo.read}</span>
+											</div>
+										</div>
+									</li>
+            
+            {/foreach}
+        {/if}									
+																		
+									
+									
+																	</ul>
+							</div>
+							<div class="article-foot">
+								<div class="pagination">
+										
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="article-sidebar">
+						   
+						    <div class="widget sections">
+						         <h3 class="widget-title"><span>搜索文章</span></h3>
+							 <form action="/helpsearch.html" id="search_form">
+          <div class="d-flex align-items-center justify-content-start">
+            <input type="search" name="search" class="th-input w-100" placeholder="输入关键词搜索帮助文档">
+            <button type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </form>
+							</div>
+
+							<div class="widget widget_recent_entries">
+								<h3 class="widget-title"><span>分类目录</span></h3>
+								<ul>
+								 {foreach $helpCate as $key=>$vo }
+				            <li>
+								<a href="/helpcategory/{$vo.id}.html">{$vo.title}</a>
+							</li>
+                            {/foreach}
+								</ul>
+							</div>
+
+							
+						</div>
+					</div>
+				</div>
+
+
+			</div><!-- /.main-content -->
+		</div>
+	</div>
+	<script type="text/javascript">$('#newsul li:gt(10)').remove();</script>
+</section>
+
+  {else/}
+{include file="common/header"  title="抱歉,我们暂时进入了维护模式" keywords="$setting.web_seo_keywords" description="$setting.web_seo_desc" /}
+<style>
+/*样式*/
+#notfound {
+
+  position: relative;
+  padding: 160px 0 100px;
+}
+
+.notfound {
+  width: 100%;
+}
+.notfound .notfound-404 {
+  position: relative;
+  z-index: -1;
+}
+.notfound .notfound-404 h1 {
+  font-family: sans, sans-serif !important;
+  font-size: 170px;
+  margin: 0px;
+  font-weight: 900;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background: url('{$setting.web_view}/assets/images/pages/404/bg.jpg') no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: cover;
+  background-position: center;
+}
+.notfound h2 {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--typeColor);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 30px;
+}
+.notfound p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: rgba(3, 27, 78, 0.7);
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 auto 30px;
+  max-width: 410px;
+}
+.notfound a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: var(--thBlue);
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: 700;
+  -webkit-transition: background .3s ease;
+  transition: background .3s ease;
+
+}
+.notfound a:hover {
+  background: var(--thDarBlue);
+}
+/*样式*/
+@media only screen and (max-width: 767px) {
+  #notfound {
+    padding: 130px 0 70px;
+  }
+  .notfound .notfound-404 h1 {
+    font-size: 112px;
+  }
+  .notfound h2 {
+    margin-top: 25px;
+  }
+  .notfound a {
+    padding: 12px 25px;
+  }
+}
+/*样式*--/
+ </style>
+
+  <div id="notfound" class="d-flex align-items-center justify-content-center">
+    <div class="notfound text-center">
+      <div class="container">
+        <div class="notfound-404">
+          <h1>Oops!</h1>
+        </div>
+        <h2>很抱歉，我们暂时进入了维护~</h2>
+        <p>原因为{$setting.web_close_mode_message}</p>
+      </div>
+    </div>
+  </div>
+{/if}
+  {include file="common/footer"  /}
+  </body>

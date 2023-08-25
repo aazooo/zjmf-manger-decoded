@@ -1,0 +1,282 @@
+<link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcimcloud/css/01setting.css">
+<div class="container" style="min-width: 100%;width: 100%;min-height: 550px;">
+  <div class="row">
+    {if (count($iso) == 0 && $host_type == 'hyperv') || (count($iso) <= 2 && $host_type !='hyperv' )} <div
+      class="col-12 col-md-6">
+      <div class="mountingISO">
+        <div class="public_title">
+          <span class="public_title_text">挂载ISO</span>
+          <!-- <ul class="public_title_ul">
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul> -->
+        </div>
+        <div class="mountingISO_select">
+          <div class="selectItem">
+            <div class="iso-box">
+              <div class="filter-text">
+                <input class="filter-title" type="text" readonly placeholder="请选择" />
+                <i class="icon icon-filter-arrow"></i>
+              </div>
+              <select id="iso" name="filter">
+                {foreach $iso2 as $key=>$vo }
+                <option value="{$vo.id}">{$vo.name}</option>
+                {/foreach}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="mountingISO_btn">
+          <button class="btn_main purple" id="mountingISOBtn">确定</button>
+        </div>
+      </div>
+  </div>
+  {/if}
+  {if $host_type != 'hyperv'}
+  <div class="col-12 col-md-6">
+    <div class="startupItem">
+      <div class="public_title">
+        <span class="public_title_text">启动项</span>
+        <!-- <ul class="public_title_ul">
+              <li></li>
+              <li></li>
+            </ul> -->
+      </div>
+      <div class="startupItem_select">
+        <div class="selectItem">
+          <div class="startup-box">
+            <div class="filter-text">
+              <input class="filter-title" type="text" readonly placeholder="请选择" />
+              <i class="icon icon-filter-arrow"></i>
+            </div>
+            <select id="drive" name="filter">
+              <option value="d" {$bootorder=='d' ? 'selected' : '' }>Hard Disk Only</option>
+              <option value="c" {$bootorder=='c' ? 'selected' : '' }>CDROM Only</option>
+              <option value="dc" {$bootorder=='dc' ? 'selected' : '' }>(1) Hard Disk (2) CDROM</option>
+              <option value="cd" {$bootorder=='cd' ? 'selected' : '' }>(1) CDROM (2) Hard Disk</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="startupItem_btn">
+        <button class="btn_main purple" id="startupItemBtn">确定</button>
+      </div>
+    </div>
+  </div>
+  {/if}
+  {if count($iso) > 0}
+  <div class="col-12 col-md-6">
+    <div class="currentIso">
+      <div class="public_title">
+        <span class="public_title_text">当前ISO</span>
+        <!-- <ul class="public_title_ul">
+              <li></li>
+              <li></li>
+            </ul> -->
+      </div>
+      <div class="currentIso_text">
+        {foreach $iso as $key=>$vo }
+        <div class="iso_item">
+          <span class="iso_item_text">
+            {$vo.name}
+          </span>
+          <button class="iso_item_uniBtn purple" data-id="{$vo.id}">卸载</button>
+        </div>
+        {/foreach}
+      </div>
+    </div>
+  </div>
+  {/if}
+</div>
+</div>
+<link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcimcloud/css/loading.css">
+<script type="text/javascript" src="{$Request.domain}{$Request.rootUrl}/vendor/dcimcloud/js/selectFilter.js"></script>
+<script>
+  if ($('.iso-box').length > 0) {
+    $('.iso-box').selectFilter({
+      callBack: function (val) {
+        console.log(val + '是返回的值')
+      }
+    });
+  }
+  if ($('.startup-box').length > 0) {
+    $('.startup-box').selectFilter({
+      callBack: function (val) {
+        console.log(val + '是返回的值')
+      }
+    });
+  }
+
+  const mountingISOBtn = document.querySelector('#mountingISOBtn')
+  const startupItemBtn = document.querySelector('#startupItemBtn')
+
+  if (mountingISOBtn) {
+    mountingISOBtn.addEventListener('click', function () {
+      if ($(this).data('disabled') == 'true') {
+        return;
+      }
+      iso_mount_btn = $(this)
+      Swal.fire({
+        position: 'top',
+        title: '确定要挂载选择的ISO吗？',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#6e9aff',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '确认挂载',
+        cancelButtonText: '取消'
+      }).then((result) => {
+        if (result.value) {
+          iso_mount_btn.html($('#loading-circle').html());
+          iso_mount_btn.data('disabled', 'true');
+          ajax({
+            type: "post",
+            url: "{$MODULE_CUSTOM_API}",
+            data: { "func": "mountIso", "id": $("#iso").val() },
+            success: function (data) {
+              if (data.status == 200) {
+                Swal.fire({
+                  position: 'top',
+                  title: '挂载成功',
+                  type: 'success',
+                  confirmButtonColor: '#6e9aff',
+                }).then((isConfirm) => window.location.reload());
+              } else {
+                iso_mount_btn.html('确定')
+                iso_mount_btn.data('disabled', 'false')
+                Swal.fire("挂载失败", data.msg, "error");
+              }
+            }
+          })
+        }
+      })
+    })
+  }
+
+  if (startupItemBtn) {
+    startupItemBtn.addEventListener('click', function () {
+      if ($(this).data('disabled') == 'true') {
+        return;
+      }
+      drive_change_btn = $(this)
+      Swal.fire({
+        position: 'top',
+        title: '确定要更改启动项吗？',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#6e9aff',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '确认更改',
+        cancelButtonText: '取消'
+      }).then((result) => {
+        if (result.value) {
+          drive_change_btn.html($('#loading-circle').html());
+          drive_change_btn.data('disabled', 'true');
+          ajax({
+            type: "post",
+            url: "{$MODULE_CUSTOM_API}",
+            data: { "func": "setBootOrder", "id": $("#drive").val() },
+            success: function (data) {
+              if (data.status == 200) {
+                Swal.fire({
+                  position: 'top',
+                  title: '更改成功',
+                  type: 'success',
+                  confirmButtonColor: '#6e9aff',
+                }).then((isConfirm) => window.location.reload());
+              } else {
+                drive_change_btn.html('确定')
+                drive_change_btn.data('disabled', 'false')
+                Swal.fire("更改失败", data.msg, "error");
+              }
+
+            }
+          })
+        }
+      })
+    })
+  }
+
+  $(document).on('click', ".iso_item_uniBtn", function () {
+    if ($(this).data('disabled') == 'true') {
+      return;
+    }
+    iso_unmount_btn = $(this)
+    var id = $(this).data("id")
+    Swal.fire({
+      position: 'top',
+      title: '确定要卸载当前ISO吗？',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6e9aff',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '确认卸载',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.value) {
+        iso_unmount_btn.html($('#loading-circle').html());
+        iso_unmount_btn.data('disabled', 'true');
+        ajax({
+          type: "post",
+          url: "{$MODULE_CUSTOM_API}",
+          data: { "func": "unmountIso", "id": id },
+          success: function (data) {
+            if (data.status == 200) {
+              Swal.fire({
+                position: 'top',
+                title: '卸载成功',
+                type: 'success',
+                confirmButtonColor: '#6e9aff',
+              }).then((isConfirm) => window.location.reload());
+            } else {
+              iso_unmount_btn.html('卸载')
+              iso_unmount_btn.data('disabled', 'false')
+              Swal.fire("卸载失败", data.msg, "error");
+            }
+
+          }
+        })
+      }
+    })
+  })
+  function ajax(options) {
+    //创建一个ajax对象
+    var xhr = new XMLHttpRequest() || new ActiveXObject("Microsoft,XMLHTTP");
+    //数据的处理 {a:1,b:2} a=1&b=2;
+    if (typeof (options.data) != 'string') {
+      var str = "";
+      for (var key in options.data) {
+        str += "&" + key + "=" + options.data[key];
+      }
+      str = str.slice(1)
+    } else {
+      var str = options.data;
+    }
+    options.dataType = options.dataType || 'json';
+    if (options.type == "get") {
+      var url = options.url + "?" + str;
+      xhr.open("get", url);
+      xhr.setRequestHeader("Authorization", "JWT {$Think.get.jwt}");
+      xhr.send();
+    } else if (options.type == "post") {
+      xhr.open("post", options.url);
+      xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+      xhr.setRequestHeader("Authorization", "JWT {$Think.get.jwt}");
+      xhr.send(str)
+    }
+    //监听
+    xhr.onreadystatechange = function () {
+      //当请求成功的时候
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var d = xhr.responseText;
+        d = JSON.parse(d);
+        //将请求的数据传递给成功回调函数
+        options.success && options.success(d)
+      } else if (xhr.status != 200) {
+        //当失败的时候将服务器的状态传递给失败的回调函数
+        options.error && options.error(xhr.status);
+      }
+    }
+  }
+</script>

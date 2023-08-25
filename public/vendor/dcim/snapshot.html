@@ -1,0 +1,496 @@
+<!-- <link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/layui.css"> -->
+<!-- <link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/selectFilter.css"> -->
+<!-- <link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/03SnapshotBackup.css">
+  <link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/global.css"> -->
+
+<!-- <script src="{$Request.domain}{$Request.rootUrl}/vendor/dcim/js/jquery.min.js"></script> -->
+<!-- <script src="{$Request.domain}{$Request.rootUrl}/vendor/dcim/js/bootstrap.min.js"></script> -->
+<!-- <script src="{$Request.domain}{$Request.rootUrl}/vendor/dcim/js/sweetAlert2.min.js"></script> -->
+<link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/03SnapshotBackup.css">
+<!-- start：快照 -->
+{if $support_snap}
+<div class="snapShot_btn">
+  <button type="button" class="btn btn-primary waves-effect waves-light float-right" data-toggle="modal"
+    data-target="#addModal">创建快照</button>
+</div>
+{/if}
+<div class="container">
+  <!-- 创建快照模态框 -->
+  <div class="modal fade" id="addModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">创建快照</span>
+          <button type="button" class="close" data-dismiss="modal" onclick="resetShotForm()">&times;</button>
+        </div>
+
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <div class="modal_limit">
+            <div class="modal_main">
+              <form>
+                <div class="form-group">
+                  <label for="disk">磁盘选择</label>
+                  <div class="selectItem">
+                    <div class="disk-box">
+                      <div class="filter-text">
+                        <input class="filter-title" type="text" readonly placeholder="请选择" id="shotDisk" />
+                        <i class="icon icon-filter-arrow"></i>
+                      </div>
+                      <select name="id">
+                        {foreach $disk as $key=>$vo }
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="description">备注名</label>
+                  <input type="input" class="form-control" name="name" id="shotRemark">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary waves-effect waves-light createSnap"
+                style="margin-left:10px">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 创建备份模态框 -->
+  <div class="modal fade" id="addBackupModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">创建备份</span>
+          <button type="button" class="close" data-dismiss="modal" onclick="resetBackupForm()">&times;</button>
+        </div>
+
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <div class="modal_limit">
+            <div class="modal_main">
+              <form>
+                <div class="form-group">
+                  <label for="disk">磁盘选择</label>
+                  <div class="selectItem">
+                    <div class="disk-box-backup">
+                      <div class="filter-text">
+                        <input class="filter-title" type="text" readonly placeholder="请选择" id="backupDisk" />
+                        <i class="icon icon-filter-arrow"></i>
+                      </div>
+                      <select name="id">
+                        {foreach $disk as $key=>$vo }
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="description">备注名</label>
+                  <input type="input" class="form-control" name="name" id="backupRemark">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary waves-effect waves-light createBackup"
+                style="margin-left:10px">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{if $support_snap}
+<div class="table-responsive">
+  <table class="table mb-0 mt-3">
+    <thead class="thead-light">
+      <tr>
+        <th>磁盘</th>
+        <th>备注</th>
+        <th style="width:185px">创建时间</th>
+        <th style="width:145px">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {foreach $snap as $key=>$vo }
+      <tr>
+        <td>{$vo.name}</td>
+        <td>{$vo.remarks}</td>
+        <td style="text-align: center;">{$vo.create_time}</td>
+        <td style="text-align: center;">
+          <button type="button" class="btn btn-link restore" data-id="{$vo.id}">恢复</button>
+          <button type="button" class="btn btn-link deleteSnapshot" data-id="{$vo.id}">删除</button>
+        </td>
+      </tr>
+      {/foreach}
+    </tbody>
+  </table>
+</div>
+{/if}
+
+<!-- start：备份 -->
+{if $support_backup}
+<div class="backup_btn">
+  <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+    data-target="#addBackupModal">创建备份</button>
+</div>
+
+<div class="table-responsive">
+  <table class="table mb-0 mt-3">
+    <thead>
+      <tr>
+        <th>磁盘</th>
+        <th>备注</th>
+        <th style="width:185px">创建时间</th>
+        <th style="width:145px">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {foreach $backup as $key=>$vo }
+      <tr>
+        <td>{$vo.name}</td>
+        <td>{$vo.remarks}</td>
+        <td style="text-align: center;">{$vo.create_time}</td>
+        <td style="text-align: center;">
+          <button type="button" class="btn btn-link restoreBackup" data-id="{$vo.id}">恢复</button>
+          <button type="button" class="btn btn-link deleteBackup" data-id="{$vo.id}">删除</button>
+        </td>
+      </tr>
+      {/foreach}
+    </tbody>
+  </table>
+</div>
+
+{/if}
+<div style="display: none" id="loading-circle">
+  <div class="loading_limit">
+    <div class="loading_inner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+</div>
+<link rel="stylesheet" href="{$Request.domain}{$Request.rootUrl}/vendor/dcim/css/loading.css">
+<script src="{$Request.domain}{$Request.rootUrl}/vendor/dcim/js/selectFilter.js"></script>
+<script>
+  // 初始化下拉选择
+  $('.disk-box').selectFilter({
+    callBack: function (val) {
+      console.log(val + '是返回的值')
+    }
+  });
+  $('.disk-box-backup').selectFilter({
+    callBack: function (val) {
+      console.log(val + '是返回的值')
+    }
+  });
+  function resetShotForm() {
+    const shotRemark = document.querySelector('#shotRemark')
+    const shotDisk = document.querySelector('#shotDisk')
+    shotRemark.value = ''
+    shotDisk.value = ''
+  }
+
+  function resetBackupForm() {
+    const backupDisk = document.querySelector('#backupDisk')
+    const backupRemark = document.querySelector('#backupRemark')
+    backupDisk.value = ''
+    backupRemark.value = ''
+  }
+
+  // 快照表格行内 恢复按钮
+  $('.restore').on('click', function () {
+    if ($(this).data('disabled') == 'true') {
+      return;
+    }
+    restore_snap_btn = $(this)
+    var id = $(this).data("id");
+    Swal.fire({
+      position: 'top',
+      title: '确定恢复此快照吗？',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6e9aff',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '确认恢复',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.value) {
+        restore_snap_btn.html($('#loading-circle').html());
+        restore_snap_btn.data('disabled', 'true');
+        ajax({
+          type: "post",
+          url: "{$MODULE_CUSTOM_API}",
+          data: { "func": "restoreSnap", "id": id },
+          success: function (data) {
+            if (data.status == 200) {
+              Swal.fire({
+                position: 'top',
+                title: '恢复成功',
+                type: 'success',
+                confirmButtonColor: '#6e9aff',
+              }).then((isConfirm) => window.location.reload());
+            } else {
+              restore_snap_btn.html('恢复')
+              restore_snap_btn.data('disabled', 'false')
+              Swal.fire("失败", data.msg, "error");
+            }
+
+          }
+        })
+      }
+    })
+  });
+
+  // 快照表格行内 删除按钮
+  $('.deleteSnapshot').on('click', function () {
+    if ($(this).data('disabled') == 'true') {
+      return;
+    }
+    delete_snap_btn = $(this)
+    var id = $(this).data("id");
+    Swal.fire({
+      position: 'top',
+      title: '确定删除此快照吗？',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6e9aff',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '确认删除',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.value) {
+        delete_snap_btn.html($('#loading-circle').html());
+        delete_snap_btn.data('disabled', 'true');
+        ajax({
+          type: "post",
+          url: "{$MODULE_CUSTOM_API}",
+          data: { "func": "deleteSnap", "id": id },
+          success: function (data) {
+            if (data.status == 200) {
+              Swal.fire({
+                position: 'top',
+                title: '删除成功',
+                type: 'success',
+                confirmButtonColor: '#6e9aff',
+              }).then((isConfirm) => window.location.reload());
+            } else {
+              delete_snap_btn.html('删除')
+              delete_snap_btn.data('disabled', 'false')
+              Swal.fire("失败", data.msg, "error");
+            }
+
+          }
+        })
+      }
+    })
+  });
+  // 备份表格行内 恢复按钮
+  $('.restoreBackup').on('click', function () {
+    if ($(this).data('disabled') == 'true') {
+      return;
+    }
+    restore_backup_btn = $(this)
+    var id = $(this).data("id");
+    Swal.fire({
+      position: 'top',
+      title: '确定恢复此备份吗？',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6e9aff',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '确认恢复',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.value) {
+        restore_backup_btn.html($('#loading-circle').html());
+        restore_backup_btn.data('disabled', 'true');
+        ajax({
+          type: "post",
+          url: "{$MODULE_CUSTOM_API}",
+          data: { "func": "restoreBackup", "id": id },
+          success: function (data) {
+            if (data.status == 200) {
+              Swal.fire({
+                position: 'top',
+                title: '恢复成功',
+                type: 'success',
+                confirmButtonColor: '#6e9aff',
+              }).then((isConfirm) => window.location.reload());
+            } else {
+              restore_backup_btn.html('恢复')
+              restore_backup_btn.data('disabled', 'false')
+              Swal.fire("恢复失败", data.msg, "error");
+            }
+
+          }
+        })
+      }
+    })
+  });
+
+  // 备份表格行内 删除按钮
+  $('.deleteBackup').on('click', function () {
+    if ($(this).data('disabled') == 'true') {
+      return;
+    }
+    delete_backup_btn = $(this)
+    var id = $(this).data("id");
+    Swal.fire({
+      position: 'top',
+      title: '确定删除此备份吗？',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#6e9aff',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '确认删除',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.value) {
+        delete_backup_btn.html($('#loading-circle').html());
+        delete_backup_btn.data('disabled', 'true');
+        ajax({
+          type: "post",
+          url: "{$MODULE_CUSTOM_API}",
+          data: { "func": "deleteBackup", "id": id },
+          success: function (data) {
+            if (data.status == 200) {
+              Swal.fire({
+                position: 'top',
+                title: '删除成功',
+                type: 'success',
+                confirmButtonColor: '#6e9aff',
+              }).then((isConfirm) => window.location.reload());
+            } else {
+              delete_backup_btn.html('删除')
+              delete_backup_btn.data('disabled', 'false')
+              Swal.fire("删除失败", data.msg, "error");
+            }
+
+          }
+        })
+      }
+    })
+  });
+
+  $('.createSnap').on('click', function () {
+    if (!$(this).data('submit')) {
+      $(this).html($('#loading-circle').html());
+      $(this).data('submit', 'submit')
+      ajax({
+        type: "post",
+        url: "{$MODULE_CUSTOM_API}",
+        data: $("#addModal").find("form").serialize() + "&func=createSnap",
+        success: function (data) {
+          $(".createSnap").html('确认')
+          $(".createSnap").data('submit', '')
+          if (data.status == 200) {
+            $("#addModal").modal('hide')
+            Swal.fire({
+              position: 'top',
+              title: '创建成功',
+              type: 'success',
+              confirmButtonColor: '#6e9aff',
+            }).then((isConfirm) => window.location.reload());
+          } else {
+            Swal.fire("创建失败", data.msg, "error");
+          }
+        },
+        error: function () {
+          $(".createSnap").html('确认')
+          $(".createSnap").data('submit', '')
+        }
+      })
+    }
+  });
+
+  $('.createBackup').on('click', function () {
+    if (!$(this).data('submit')) {
+      $(this).html($('#loading-circle').html());
+      $(this).data('submit', 'submit')
+      ajax({
+        type: "post",
+        url: "{$MODULE_CUSTOM_API}",
+        data: $("#addBackupModal").find("form").serialize() + "&func=createBackup",
+        success: function (data) {
+          $(".createBackup").html('确认')
+          $(".createBackup").data('submit', '')
+          if (data.status == 200) {
+            $("#addBackupModal").modal('hide')
+            Swal.fire({
+              position: 'top',
+              title: '创建成功',
+              type: 'success',
+              confirmButtonColor: '#6e9aff',
+            }).then((isConfirm) => window.location.reload());
+          } else {
+            Swal.fire("创建失败", data.msg, "error");
+          }
+        },
+        error: function () {
+          $(".createBackup").html('确认')
+          $(".createBackup").data('submit', '')
+        }
+      })
+    }
+  });
+
+  function ajax(options) {
+    //创建一个ajax对象
+    var xhr = new XMLHttpRequest() || new ActiveXObject("Microsoft,XMLHTTP");
+    //数据的处理 {a:1,b:2} a=1&b=2;
+    if (typeof (options.data) != 'string') {
+      var str = "";
+      for (var key in options.data) {
+        str += "&" + key + "=" + options.data[key];
+      }
+      str = str.slice(1)
+    } else {
+      var str = options.data;
+    }
+    options.dataType = options.dataType || 'json';
+    if (options.type == "get") {
+      var url = options.url + "?" + str;
+      xhr.open("get", url);
+      xhr.setRequestHeader("Authorization", "JWT {$Think.get.jwt}");
+      xhr.send();
+    } else if (options.type == "post") {
+      xhr.open("post", options.url);
+      xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+      xhr.setRequestHeader("Authorization", "JWT {$Think.get.jwt}");
+      xhr.send(str)
+    }
+    //监听
+    xhr.onreadystatechange = function () {
+      //当请求成功的时候
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var d = xhr.responseText;
+        d = JSON.parse(d);
+        //将请求的数据传递给成功回调函数
+        options.success && options.success(d, xhr.responseXML)
+      } else if (xhr.status != 200) {
+        //当失败的时候将服务器的状态传递给失败的回调函数
+        options.error && options.error(xhr.status);
+      }
+    }
+  }
+</script>

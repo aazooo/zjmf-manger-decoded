@@ -1,0 +1,161 @@
+{include file="common/header"  title="联系我们" keywords="智简魔方" description="智简魔方" /}
+
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=klRLuWrAe7qeuesBs9GpN0fMVvPsaADM"></script>
+  <section class="page-hero tos space2x">
+			    	<div class="container page-hero-text">
+			    		<div class="row">
+			    			<div class="col-sm-6">
+			    				<h2>联系我们</h2>
+			    				<p class="hero-slogan">质量为本、客户为根、勇于拼搏、务实创新</p>
+			    			</div>
+			    		</div>
+			    	</div>
+			</section>
+			<section class="pages-tabs">
+				<div class="pages-tabsFix">
+				    <div class="container">
+							<div class="tabs-item">
+							<a href="about.html">关于我们</a>
+					    </div>
+							<!-- <div class="tabs-item">
+							<a href="news.html">新闻中心</a>
+					    </div> -->
+					    <div class="tabs-item active">
+							<a href="contact.html">联系我们</a>
+					    </div>
+
+
+				    </div>
+				</div>
+			</section>
+		</div>
+		<div id="contact-info" class="space2x">
+			<div class="container">
+			    <div class="head-top text-center">
+			<h2 class="head-title">联系我们</h2>
+		</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="info-box" style="height: 265px;">
+							<!-- <div class="info-title phone-icon">售前咨询</div> -->
+							<div class="info-title">
+								<div style="display: flex;align-items: center;">
+									<img style="width: 48px;height:48px;" src="{$setting.web_view}/assets/img/newImg/qq.png" alt="">
+									<span style="margin-left: 15px;">售前咨询</span>
+								</div>
+							</div>
+							<div class="info-details">
+
+								<p>我们有优质的客户团队专业提供售前的产品及技术咨询服务。</p>
+								<p><a href="#" onclick="consultingService()">咨询QQ></a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="info-box" style="height: 265px;">
+							<!-- <div class="info-title chat-icon">售后技术</div> -->
+							<div class="info-title">
+								<div style="display: flex;align-items: center;">
+									<img style="width: 48px;height:48px;" src="{$setting.web_view}/assets/img/newImg/info.png" alt="">
+									<span style="margin-left: 15px;">售后技术</span>
+								</div>
+							</div>
+							<div class="info-details">
+								<p>提供7*24小时技术支持服务，全方位为您提供专业的技术保障，您无需担心自身没有经验、没有技术的问题。</p>
+								<p><a href="#" onclick="consultingService()">咨询QQ></a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="info-box" style="height: 265px;">
+							<!-- <div class="info-title location-icon">OEM合作</div> -->
+							<div class="info-title">
+								<div style="display: flex;align-items: center;">
+									<img style="width: 48px;height:48px;" src="{$setting.web_view}/assets/img/newImg/phone.png" alt="">
+									<span style="margin-left: 15px;">OEM合作</span>
+								</div>
+							</div>
+							<div class="info-details">
+								<p>寻求更多认同行业合伙人，我们珍惜与每一位客户的每一次真诚合作，也坚信每一次双赢合作是对我们最高，最好的检验。</p>
+								<p>咨询电话：<a class="zixun-phone" href="#">{$setting.company_phone}</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ditu">
+			<div class="container" style="height: 700px;">
+				<div id="containerBaidu"></div> 
+			</div>
+		</div>
+			<!-- <div id="extra-info" class="container-fluid" style="margin-top: 50px;">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="text-holder">
+								<p style="font-size: 20px; font-weight: bold;color: #FFFFFF;">不是下一个商业宝藏,不是下一个商业宝藏</p>
+								<p style="font-size: 20px; font-weight: bold;color: #FFFFFF;">很难说企业云服务,很难说企业云服务</p>
+
+								<div style="opacity: 0.7;margin-top: 20px;">
+								<p>2020年受疫情催化、国家层面政策加持，推进数据中心加速建设。云计算、大数据、移动互联、人工智能技术的发展带来了企业云服务的新蓝海。
+									前天错过了百度、腾讯、阿里；昨天，你错过了小米、美团、滴滴<br>
+									今天，请不要再错过我们，万亿市场，你来不来？</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 link-holder">
+							<div class="tld-graphic">
+								<div>支持云厂商</div>
+								<div>支持云资源</div>
+								<div>适用人群</div>
+							</div>
+							<a href="#" class="ybtn ybtn-header-color lijiJiion">立即加入</a>
+						</div>
+					</div>
+				</div>
+			</div> -->
+
+			<script type="text/javascript">
+				var company_map = '{$setting.map}'
+					,map_str = [];
+				if(company_map)
+				{
+					map_str = company_map.split(',');
+				}
+				// 百度地图API功能
+				var map = new BMapGL.Map("containerBaidu");
+				var point = new BMapGL.Point(map_str[0],map_str[1]);
+				map.centerAndZoom(point, 18);
+				map.enableScrollWheelZoom(true); 
+				
+				var marker = new BMapGL.Marker(point);  // 创建标注
+				map.addOverlay(marker);              // 将标注添加到地图中
+				// var opts = {
+				// 	width : 200,     // 信息窗口宽度
+				// 	height: 100,     // 信息窗口高度
+				// 	title : "重科智谷" , // 信息窗口标题
+				// }
+				// var infoWindow = new BMapGL.InfoWindow("地址：重庆科学技术研究院二期B栋19层", opts);  // 创建信息窗口对象 
+				// marker.addEventListener("click", function(){          
+				// 	map.openInfoWindow(infoWindow, point); //开启信息窗口
+				// }); 
+				
+				function consultingService(){
+					let qq='{$setting.company_qq}'
+					// console.log(123123,qq)
+					if(qq){
+						let url='https://wpa.qq.com/msgrd?v=3&uin='+qq+'&site=qq&menu=yes'
+						window.open(url)
+					}
+				}
+				
+			</script>
+			<style>
+				#containerBaidu {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+			</style>
+
+
+ {include file="common/footer"  /}

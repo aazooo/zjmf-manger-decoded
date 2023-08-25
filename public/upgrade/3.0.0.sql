@@ -1,0 +1,1 @@
+ALTER TABLE `shd_certifi_log` ADD COLUMN `notes` varchar(5000) NOT NULL DEFAULT '' COMMENT '其他信息';

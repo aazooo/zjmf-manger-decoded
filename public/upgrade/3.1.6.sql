@@ -1,0 +1,2 @@
+ALTER TABLE `shd_zjmf_finance_api` ADD COLUMN `is_resource` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否资源池api:1是，0否默认';
+ALTER TABLE `shd_zjmf_finance_api` ADD COLUMN `ticket_open` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否开启工单传递：1时，0否默认';

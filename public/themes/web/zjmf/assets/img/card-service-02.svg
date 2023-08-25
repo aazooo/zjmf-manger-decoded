@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="145px" height="135px" viewBox="0 0 145 135" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>切图</title>
+    <defs>
+        <linearGradient x1="136.705363%" y1="6.4293505%" x2="27.1237345%" y2="85.7612947%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#EEF6FC" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="96.3772562%" y1="-3.94857235%" x2="31.6793088%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#E3F1FB" offset="100%"></stop>
+        </linearGradient>
+        <path d="M59,31 L59,35.0714286 C59,64.3025592 83.1131854,88 112.857143,88 L112.857143,88 L117,88 L117,64.0418186 L100.446498,64.0418186 L94.1784323,72.7563671 C85.9339494,68.0595135 79.0707177,61.2758546 74.3434506,53.1400445 L74.3434506,53.1400445 L83.8571429,45.2491191 L83.8571429,31 L59,31 Z" id="path-3"></path>
+    </defs>
+    <g id="切图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="联系我们-预约技术架构师">
+            <path d="M105,45 L105,168 L45.5921053,168 L45.592,167.999 L0,168 L0,93.3707865 L45.592,93.37 L45.5921053,45 L105,45 Z M91,119.444444 L58,119.444444 L58,125 L91,125 L91,119.444444 Z M91,109.722222 L78.625,109.722222 L78.625,115.277778 L91,115.277778 L91,109.722222 Z M91,100 L66.25,100 L66.25,105.555556 L91,105.555556 L91,100 Z" id="形状结合" fill="url(#linearGradient-1)" transform="translate(52.500000, 106.500000) scale(-1, 1) translate(-52.500000, -106.500000) "></path>
+            <circle id="椭圆形" fill="url(#linearGradient-2)" cx="89" cy="56" r="56"></circle>
+            <mask id="mask-4" fill="white">
+                <use xlink:href="#path-3"></use>
+            </mask>
+            <use id="Clip-2" fill="#FFFFFF" xlink:href="#path-3"></use>
+        </g>
+    </g>
+</svg>

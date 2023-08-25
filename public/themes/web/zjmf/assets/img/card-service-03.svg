@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="182px" height="127px" viewBox="0 0 182 127" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>联系我们-智能客服</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="-27.8457392%" y1="-15.7416099%" x2="50%" y2="79.8947312%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#EEF6FC" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="-13.2662177%" y1="-3.01464032%" x2="76.3558661%" y2="72.9424466%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#E3F1FB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="联系我们" transform="translate(-1330.000000, -619.000000)">
+            <g id="联系我们-智能客服" transform="translate(967.000000, 560.000000)">
+                <g transform="translate(363.000000, 59.000000)" id="形状结合">
+                    <path d="M182,18.4264907 L182,113.426491 L92.814,113.426 L55,137.426491 L55,102.426491 L55,18.4264907 L182,18.4264907 Z" fill="url(#linearGradient-1)" transform="translate(118.500000, 77.500000) scale(-1, 1) translate(-118.500000, -77.500000) "></path>
+                    <path d="M140,0.426490676 L140,95.4264907 L37.814,95.426 L0,119.426491 L0,84.4264907 L0,0.426490676 L140,0.426490676 Z" fill="url(#linearGradient-2)"></path>
+                    <path d="M103.996108,46.4269736 C103.720395,64.1454472 88.8292715,78.4264907 70.5,78.4264907 C51.9984609,78.4264907 37,63.875745 37,45.9264907 L37.004,46.427 Z" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

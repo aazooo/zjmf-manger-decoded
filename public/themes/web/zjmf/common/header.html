@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>[title] - {$setting.company_name}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="[description]" />
+  <meta name="keywords" content="[keywords]" />
+  <link href="{$setting.web_view}/assets/css/all.min.css" rel="stylesheet">
+  <link href="{$setting.web_view}/assets/css/base.css" rel="stylesheet">
+  <link href="{$setting.web_view}/assets/css/fontawesome.css" rel="stylesheet">
+  <script src="{$setting.web_view}/assets/js/jquery.min.js"></script>
+  <script src="{$setting.web_view}/assets/js/scripts.min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      $(".menu_down").hover(function (){  
+            $(this).find('ul').show();  
+        },function (){  
+            $(this).find('ul').hide();    
+        }); 
+    })
+  </script>
+
+</head>
+
+<body>
+   <div class="header hasBottom">
+  <div class="container">
+    <nav class="zjmf navbar navbar-default">
+      <div class="row">
+        <div class="navbar-header rel idx-1">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" style="background-image:url({$setting.web_logo})" href="/"></a>
+          <div class="login pull-right visible-xs-block">
+            <ul>
+              
+              <li class="pull-left">
+                <a href="{$setting.web_url}/login">{$Lang.login}</a>
+              </li>
+              <li class="pull-left">
+                <a href="{$setting.web_url}/register">{$Lang.register}</a>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+        <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
+          <ul class="nav navbar-nav">
+
+            {foreach $www_top as $key =>$val}
+              <li class="{if (in_array($val.nav_type,[1,2]))} dropdown static {/if}">
+              <!-- ------------一级菜单 ---start------------------- -->
+              {if (!isset($val.son))}
+              <a href="{$val.url}">{$val.name}</a>
+              {/if}
+
+              {if (isset($val.son))}
+              <a href="#" data-toggle="dropdown" class="dropdown-toggle">{$val.name}<span class="caret"></span></a>
+              {/if}
+              <!-- ------------一级菜单 ---end------------------- -->
+
+              <!-- -----------二级菜单 ---start------------------- -->
+              {if (isset($val.son))}
+                  {if (in_array($val.nav_type,[1,2]))}
+                      <ul class="dropdown-menu fullwidth">
+                        {foreach $val.son as $k =>$v}
+                        <li class="w{:count($val.son)}">
+                          <dl>
+                            <dt>{$v.name}</dt>
+                            <!-- 一级分组-商品分组 | 商品分组-商品  三级菜单 -->
+                            {if (isset($v.son))}
+                            {foreach $v.son as $vs_k => $vs_v}
+                            <dd>
+                              <a href="{$vs_v.url}">{$vs_v.name}</a>
+                            </dd>
+                            {/foreach}
+                            {/if}
+                          </dl>
+                        </li>
+                        {/foreach}
+                      </ul>
+                  {/if}
+
+                  {if (!in_array($val.nav_type,[1,2]))}
+                    <ul class="dropdown-menu fullwidth noLeft">
+                      {foreach $val.son as $k =>$v}
+                        <li class="w50">
+                          {if (!isset($v.son))}
+                            <a href="{$v.url}" {if (isset($v.tag))} {$v.tag} {/if}>{$v.name}</a>
+                          {/if}
+
+                          {if (isset($v.son))}
+                            <a href="#" {if (isset($v.tag))} {$v.tag} {/if}>{$v.name}<span class="caret"></span></a>
+                          {/if}
+
+                          {if (isset($v.son))}
+                            <ul>
+                              {foreach $v.son as $vs_k => $vs_v}
+                                  <li>
+                                      <a href="{$vs_v.url}" {if (isset($vs_v.tag))} {$vs_v.tag} {/if}>{$vs_v.name}</a>
+                                  </li>
+                              {/foreach}
+                            </ul>
+                          {/if}
+                        </li>
+                      {/foreach}
+                    </ul>
+                  {/if}
+
+              {/if}
+              <!-- ------------二级菜单 ---end------------------- -->
+            </li>
+            {/foreach}
+            
+            
+          </ul>
+          <ul class="nav navbar-nav navbar-right visible-lg-block">
+           
+           {if $userInfo}
+           <li class=""><a href="{$setting.web_url}/clients.html#/user-center">控制台</a></li>
+            <li class="register">
+              <a href="{$setting.web_url}/logout">退出账户</a>
+            </li>
+           {else}
+            <li class=""><a href="{$setting.web_url}/login">{$Lang.login}</a></li>
+            <li class="register">
+              <a href="{$setting.web_url}/register">{$Lang.register}</a>
+            </li>
+           {/if}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

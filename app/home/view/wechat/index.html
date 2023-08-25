@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>-->
+<!--<script>-->
+<!--    var obj = new WxLogin({-->
+<!--        self_redirect: false,-->
+<!--        id:"wx-code",-->
+<!--        appid: "***",-->
+<!--        scope: "snsapi_login",-->
+<!--        redirect_uri: "http://demo1.idcsmart.com/weixin_login.html",-->
+<!--        state: "",-->
+<!--        style: "",-->
+<!--        href: "https://demo1.idcsmart.com/css/weixin_code.css"-->
+<!--    });-->
+<!--</script>-->
+
+<div id="login_container"></div>
+<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<script>
+    var loginUrl = "http://http://demo1.idcsmart.com/index.php?route=common/home/weChatLogin";
+    console.log(loginUrl);
+    //console.log(loginUrl);
+    var obj = new WxLogin({
+        id: "login_container",//存放二维码框
+        appid: "wx81d3a83634151310",
+        scope: "snsapi_login",
+        redirect_uri: encodeURIComponent(loginUrl),
+        state: Math.ceil(Math.random()*1000),
+        style: "black",
+        href: ""});
+</script>
+</body>
+</html>

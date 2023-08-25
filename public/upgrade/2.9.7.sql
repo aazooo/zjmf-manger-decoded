@@ -1,0 +1,1 @@
+update `shd_configuration` set `value`=0 where `setting`='contract_open';

@@ -1,0 +1,114 @@
+{include file="common/header"  title="$helpListCate.catename" keywords="$helpListCate.catename" description="$helpListCate.catename" /}
+{tagdata name="helpCate,helpListCate" /}
+    <!-- Home Start -->
+    <section class="bg-half-170 d-table w-100 bg-light" style="background: url('{$setting.web_view}/images/bg/page.png') top center;"
+        id="home">
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-lg-12">
+                    <div class="title-heading text-center text-md-left">
+                        <h3>帮助中心</h3>
+                        <p class="text-muted para-desc mt-3 mb-0">您的需求是我们服务提升的动力，让您满意是我们的第一心愿。
+                            这里详细罗列使用中的各类问题，如果暂时没找到您要的答案，联系我们客服吧
+                        </p>
+                        <nav aria-label="breadcrumb" class="d-inline-block mt-4">
+                            <ul class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="/index.html">首页</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">帮助中心</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!--end col-->
+            </div>
+            <!--end row-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end section-->
+    <div class="position-relative">
+        <div class="shape overflow-hidden text-white">
+            <svg viewBox="0 0 1000 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 0 0 c 0 0 200 50 500 50 s 500 -50 500 -50 v 101 h -1000 v -100 z" fill="currentColor"></path>
+            </svg>
+        </div>
+    </div>
+    <!-- Home End -->
+
+    <!-- Start -->
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card domain-name border-0 rounded-pill overflow-hidden">
+                        <div class="py-5 px-4 bg-white">
+                            <div class="input-group form-group mb-0">
+                                <input name="name" id="search"  type="text" class="form-control rounded-left"
+                                    placeholder="请搜索关键字">
+                                <div class="input-group-append" >
+                                    <input type="submit"  id="searchsubmit" data-url="/helpsearch.html" name="search"
+                                        class="searchbtn btn btn-primary btn-block" value="搜索">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end col-->
+            </div>
+            <!--end row-->
+        </div>
+        <!--end container-->
+		    <!-- Start -->
+		<section class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-4 col-md-5 col-12 d-none d-md-block">
+						<div class="rounded-pill shadow p-4 component-wrapper">
+							<ul id="help-class" class="list-unstyled mb-0">
+							  {foreach $helpCate as $key=>$vo } 
+							  <li class="mb-4"><a href="/helpcate/{$vo.id}.html" class="mouse-down h6 text-dark" style="color: #5368f1" >{$vo.title}</a></li>
+							  {/foreach}
+							</ul>
+							
+						</div>
+					</div>
+					<!--end col-->
+
+					<div class="col-lg-8 col-md-7 col-12" id="help-list">
+					  <!-- 列表 -->
+					  <div style="margin-bottom:20px;">
+					  {foreach $helpListCate.list as $key=>$vo } 
+					  <div class="section-title" data-id=" + item.id + ">
+						<a href="/helpcontent/{$vo.id}.html" style="color:#333">
+						  <p class="section-title-desc"><i class="mdi mdi-18px mdi-arrow-right"></i>{$vo.title}</p> 
+						</a>  
+					  </div>
+					  {/foreach}
+						</div>
+						<div class="col-12">
+							<ul class="pagination justify-content-center mb-0">
+							  {if $helpListCate.previous}
+							  <li class="page-item"><a class="page-link" href="/helpcate/{$helpListCate.cateid}/{$helpListCate.previous}.html"  aria-label="Previous">上一页</a></li>
+							  {/if}
+							  {for start="$helpListCate.start" end="$helpListCate.num"}
+							  <li class="page-item {if $i==$helpListCate.page}active{/if}"><a class="page-link" href="/helpcate/{$helpListCate.cateid}/{$i}.html">{$i}</a></li>
+							  {/for}
+							  {if $helpListCate.next}
+							  <li class="page-item"><a class="page-link" href="/helpcate/{$helpListCate.cateid}/{$helpListCate.next}.html"        aria-label="Next">下一页</a></li>
+							  {/if}
+							</ul>
+						</div>
+					</div>
+					<!--end col-->
+				</div>
+				<!--end row-->
+				
+			</div>
+			<!--end container-->
+		</section>
+        <!--end container-->        
+    </section>
+    <!--end section-->
+    <!-- End -->
+
+{include file="common/footer"  /}

@@ -1,0 +1,1 @@
+INSERT INTO `shd_configuration` (`setting`,`value`,`create_time`,`update_time`) VALUES ('affiliate_invited','0',0,0),('affiliate_invited_money','',0,0),('affiliate_invited_type','1',0,0);

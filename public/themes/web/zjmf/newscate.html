@@ -1,0 +1,135 @@
+{include file="common/header"  title="$newsListCate.catename" keywords="$newsListCate.catename" description="$newsListCate.catename" /}
+{tagdata name="newsCate,newsListCate" /}
+<section class="page-hero article space2x">
+				<div class="container page-hero-text">
+					<div class="row">
+						<div class="col-sm-6">
+							<h2>新闻中心</h2>
+							<p class="hero-slogan">点燃计算与数据的价值</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- <section class="pages-tabs">
+				<div class="pages-tabsFix">
+						<div class="container">
+							<div class="tabs-item">
+							<a href="about.html">公司简介</a>
+							</div>
+							<div class="tabs-item active">
+							<a href="news.html">新闻中心</a>
+							</div>
+							<div class="tabs-item">
+							<a href="contact.html">联系我们</a>
+							</div>
+
+
+						</div>
+				</div>
+			</section> -->
+    <div class="position-relative">
+        <div class="shape overflow-hidden text-white">
+            <svg viewBox="0 0 1000 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 0 0 c 0 0 200 50 500 50 s 500 -50 500 -50 v 101 h -1000 v -100 z" fill="currentColor"></path>
+            </svg>
+        </div>
+    </div>
+    <!-- Home End -->
+
+    <!-- Blog Start -->
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-7 col-12">
+                    <div class="row newsList">
+                        <!-- <li class="list-inline-item"><a href="javascript:void(0)"
+                            class="like text-dark"><i data-feather="heart"
+                                class="fea icon-sm"></i> </a></li> -->
+                        {foreach $newsListCate.list as $key=>$vo } 
+						<div class="col-lg-6 col-12 mb-4 pb-2">                  
+                          <div class="card blog-post border-0 shadow rounded overflow-hidden">                      
+                                               
+                            <div class="card-body p-4 content">                          
+                              <h5><a href="/newscontent/{$vo.id}.html" class="title text-dark">{$vo.title}</a></h5>                          
+                              <p class="text-muted mb-3 description">{$vo.description}</p>                          
+                              <ul  class="list-unstyled post-meta d-flex justify-content-between mb-0 pt-3 border-top">                              
+                                <li>                                  
+                                  <ul class="list-unstyled mb-0">                                                                            
+                                    <li class="list-inline-item ml-2"><a href="/newscontent/{$vo.id}.html"   class="comment text-dark"><i data-feather="message-circle"  class="fea icon-sm"></i>{$vo.read}</a></li>                                  
+                                  </ul>                              
+                                </li>                              
+                                <li><a href="/newscontent/{$vo.id}.html" class="read-more text-dark">阅读更多 <i   class="mdi mdi-arrow-right"></i></a></li>                          
+                              </ul>                      
+                            </div>
+							
+                          </div>     
+						  
+                        </div> 
+						{/foreach}
+                        <div class="col-12">
+                            <ul class="pagination justify-content-center mb-0">
+							  {if $newsListCate.previous}
+                              <li class="page-item"><a class="page-link" href="/newscate/{$newsListCate.cateid}/{$newsListCate.previous}.html"  aria-label="Previous">上一页</a></li>
+							  {/if}
+							  {for start="$newsListCate.start" end="$newsListCate.num"}
+                              <li class="page-item {if $i==$newsListCate.page}active{/if}"><a class="page-link" href="/newscate/{$newsListCate.cateid}/{$i}.html">{$i}</a></li>
+							  {/for}
+							  {if $newsListCate.next}
+                              <li class="page-item"><a class="page-link" href="/newscate/{$newsListCate.cateid}/{$newsListCate.next}.html"        aria-label="Next">下一页</a></li>
+							  {/if}
+                            </ul>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <!--end col-->
+
+                <div class="col-lg-4 col-md-5 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <div class="sidebar component-wrapper mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <!-- SEARCH -->
+                        <div class="widget mb-4 pb-2">
+                            <div id="search2" class="widget-search mb-0">
+                                <div id="searchform" class="searchform">
+                                    <div>
+                                        <input type="text" class="border rounded" name="s" id="search"
+                                            placeholder="请搜索关键字">
+                                        <input type="submit" id="searchsubmit" data-url="/newssearch.html" value="Search">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- SEARCH -->
+
+                        <!-- CATAGORIES -->
+                        <div class="widget mb-4 pb-2">
+                            <h4 class="widget-title">分类</h4>
+                            <div class="p-4 mt-4 rounded shadow">
+                                <ul class="list-unstyled mb-0 catagory">
+									{foreach $newsCate as $key=>$vo } 
+									<li><a href="/newscate/{$vo.id}.html">{$vo.title}</a> <span  class="float-right">{$vo.count}</span></li>
+                                
+									{/foreach}
+								</ul>
+                            </div>
+                        </div>
+                        <!-- CATAGORIES -->
+                    </div>
+                </div>
+                <!--end col-->
+            </div>
+            <!--end row-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end section-->
+    <!-- Blog End -->
+
+    <!-- Footer Start -->
+    <div id="footer"></div>
+    <!--end footer-->
+
+
+
+
+{include file="common/footer"  /}

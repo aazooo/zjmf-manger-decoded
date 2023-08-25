@@ -1,0 +1,79 @@
+<section class="foot">
+	<div class="container">
+		<div class="foot-item">
+			<div class="foot-info">
+				<div class="foot-text">即刻加入我们</div>
+        <div class="foot-text-two">一起进入智能化世界，开启云服务之旅，让您的业务飞速拓展</div>
+				<a href="/register" class="btn btn-default">立即注册</a>
+			</div>
+		</div>
+	</div>
+</section>
+<div class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="address-holder">
+          <a href="/index.html">
+            <div class="phone" id="company-logo-wrapper">
+              <img id="company-logo" src="{$setting.web_logo}" />
+            </div>
+          </a>
+          <p class="mt-4 text-foot">{$setting.company_profile}</p>       
+         
+        </div>
+      </div>
+      {foreach $www_bottom as $key => $val}
+        <div class="col-md-2">
+          <div class="footer-menu-holder">
+            <h4>{$val.name}</h4>
+            {if (isset($val.son))}
+              <ul class="footer-menu">
+                {foreach $val.son as $k => $v}
+                  <li><a href="{$v.url}" {if (isset($v.tag))} {$v.tag} {/if}>{$v.name}</a></li>
+                {/foreach}
+              </ul>
+            {/if}
+
+          </div>
+        </div>
+      {/foreach}
+      
+            <div class="col-md-3">
+        <div class="footer-menu-holder">
+          <h4>联系我们</h4>
+       <div class="phone footer-contact-list"><i class="fas fa-phone"></i><span>{$setting.company_phone}</span></div>
+          <div class="email footer-contact-list"><i class="fas fa-envelope"></i><span>{$setting.company_email}</span></div>
+          <div class="address footer-contact-list">
+            <i class="fas fa-map-marker"></i>
+            <span>{$setting.company_address}</span>
+          </div>
+          <!-- <div class="icp footer-contact-list">
+            <i class="fas fa-map-marker"></i>
+            <span>{$setting.company_record}</span>
+          </div> -->
+          </div>
+    </div>
+    
+    </div>
+    <div class="friendlyLink row">
+      <div class="friendlyLink-title col-md-2 col-sm-12">友情链接</div>
+      <div class="friendlyLinkDiv col-md-10 col-sm-12">
+        {foreach $f_links as $k => $v}
+          <span><a href="{$v.domain}" {$v.link_tag}>{$v.name}</a></span>
+        {/foreach}
+      </div>
+    </div>
+    
+    
+  </div>
+  <div class="beianNumber">
+    <div class="beianNumber-des">
+      Copyright 2002-2021 {$setting.company_name} All Rights Reserved.
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

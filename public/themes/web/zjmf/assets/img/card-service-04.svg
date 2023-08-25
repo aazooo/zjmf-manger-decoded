@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="195px" height="83px" viewBox="0 0 195 83" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>联系我们-自助服务</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="126.953896%" y1="-17.3774682%" x2="50%" y2="58.7945441%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#EEF6FC" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="-5.63905187%" y1="8.64722659%" x2="64.2595836%" y2="68.3296035%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#E3F1FB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="联系我们" transform="translate(-968.000000, -783.000000)">
+            <g id="联系我们-自助服务" transform="translate(359.000000, 766.000000)">
+                <g transform="translate(609.000000, 17.000000)">
+                    <rect id="矩形" fill="url(#linearGradient-1)" x="125" y="30" width="70" height="78"></rect>
+                    <path d="M160,0 L160,116 L0,116 L0,0 L160,0 Z M70.2622951,69.6666667 L26,69.6666667 L26,76 L70.2622951,76 L70.2622951,69.6666667 Z M134,53.8333333 L26,53.8333333 L26,60.1666667 L134,60.1666667 L134,53.8333333 Z M134,38 L26,38 L26,44.3333333 L134,44.3333333 L134,38 Z M158,16 L2,16 L2,18 L158,18 L158,16 Z" id="形状结合" fill="url(#linearGradient-2)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

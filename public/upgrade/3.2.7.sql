@@ -1,0 +1,1 @@
+ALTER TABLE `shd_certifi_log` MODIFY `pic` TEXT COMMENT '图片集合用逗号分割';

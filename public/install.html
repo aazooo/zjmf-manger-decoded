@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <title>智简魔方财务安装向导</title>
+  <script src="./static/js/jquery.js"></script>
+</head>
+
+<body>
+  <!-- 第一步 -->
+  <div class="show_box" id="one">
+    <div class="nav_top cerfix">
+      <img src="./static/images/logo.png" alt="">
+      <h4>智简魔方财务安装向导<span class="edition"></span></h4>
+    </div>
+    <div class="text_content">
+      <div class="text_contentbg">
+        <h3>财务系统软件使用协议</h3>
+        版权所有 © 2019-2021,财务系统开源社区<br>
+        感谢您选择财务系统内容管理框架, 希望我们的产品能够帮您把网站发展的更快、更好、更强！<br>
+        财务系统遵循Apache Lisense 2.0开源协议发布，并提供免费使用。<br>
+        财务系统建站系统由顺戴网络科技有限公司(以下简称顺戴网络，官网https://www.idcsmart.com)发起并开源发布。 <br>
+        顺戴网络包含以下网站：<br>
+        顺戴网络官网： https://www.idcsmart.com<br>
+        <h3>财务系统免责声明</h3>
+        1、使用财务系统构建的网站的任何信息内容以及导致的任何版权纠纷和法律争议及后果，财务系统官方不承担任何责任。<br>
+        2、您一旦安装使用财务系统，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。
+        <br>
+        <br>
+      </div>
+    </div>
+    <div class="btnbox">
+      <!-- <button style="color: #3699FF;">不同意</button> -->
+      <button style="color: white;background-color:#3699FF;" class="nextStep">我同意</button>
+    </div>
+  </div>
+  <!-- 第二步 -->
+  <div class="show_box" id="two">
+    <div class="nav_top cerfix">
+      <img src="./static/images/logo.png" alt="">
+      <h4>智简魔方财务安装向导<span class="edition"></span></h4>
+    </div>
+    <ul class="buzou">
+      <li><b class="active">1</b>检测环境</li>
+      <li><i></i></li>
+      <li><b>2</b>创建数据</li>
+      <li><i></i></li>
+      <li><b>3</b>完成安装</li>
+    </ul>
+    <div class="table">
+      <ul class="table_content" id="envs">
+        <!-- <li class="table_title"><span>环境检测</span><span>当前状态</span></li> -->
+      </ul>
+      <ul class="table_content" id="modules">
+        <!-- <li class="table_title"><span>模块检测</span><span></span></li> -->
+      </ul>
+      <ul class="table_content" id="folders">
+        <!-- <li class="table_title"><span   style="width: 50%;">目录、文件权限检查</span><span style="padding-right: 40px;">写入</span><span style="padding-right: 15px;">读取</span></li> -->
+      </ul>
+    </div>
+
+
+
+
+    <div class="btnbox">
+      <button style="color: white;background-color: #1BC5BD;" class="lastStep">重新检测</button>
+      <button style="background-color:#3699FF;color:white;" class="nextStep jc-button">下一步</button>
+    </div>
+  </div>
+  <!-- 第三步 -->
+  <div class="show_box" id="three">
+    <div class="nav_top cerfix">
+      <img src="./static/images/logo.png" alt="">
+      <h4>智简魔方财务安装向导<span class="edition"></span></h4>
+    </div>
+    <ul class="buzou">
+      <li><b>1</b>检测环境</li>
+      <li><i></i></li>
+      <li><b class="active">2</b>创建数据</li>
+      <li><i></i></li>
+      <li><b>3</b>完成安装</li>
+    </ul>
+    <div class="input_content">
+      <div class="input_title"><span><img src="./static/images/infoicon.png" style="margin-right: 8px;"
+            alt="">数据库信息</span></div>
+      <div class="text_row">
+        <div>数据库服务器：</div>
+        <input type="text" value="localhost" class="databaseFiv">
+      </div>
+      <div class="text_row">
+        <div>数据库端口：</div>
+        <input type="text" value="3306" class="databaseFiv">
+      </div>
+      <div class="text_row">
+        <div>数据库用户名：</div>
+        <input type="text" value="username" class="databaseFiv">
+      </div>
+      <div class="text_row">
+        <div>数据库密码：</div>
+        <input type="text" value="password" class="databaseFiv">
+      </div>
+      <div class="text_row">
+        <div>数据库名：</div>
+        <input type="text" value="zjmfmanger" class="databaseFiv">
+      </div>
+      <div class="text_row" style="padding-right: 0;">
+        <div class="errts cerfix" id="rqstbc"><img style="margin-right: 8px;" src="./static/images/err.png" alt=""><span
+            id="daFail">数据库连接失败，请重试！</span></div>
+      </div>
+
+    </div>
+
+
+
+
+    <div class="btnbox">
+      <button style="color: #3699FF;" class="lastStep">上一步</button>
+      <button style="color: white;background-color:#3699FF;" class="nextStep">下一步</button>
+    </div>
+  </div>
+  <!-- 第四步 -->
+  <div class="show_box" id="four">
+    <div class="nav_top cerfix">
+      <img src="./static/images/logo.png" alt="">
+      <h4>智简魔方财务安装向导<span class="edition"></span></h4>
+    </div>
+    <ul class="buzou">
+      <li><b>1</b>检测环境</li>
+      <li><i></i></li>
+      <li><b class="active">2</b>创建数据</li>
+      <li><i></i></li>
+      <li><b>3</b>完成安装</li>
+    </ul>
+    <div class="input_content">
+      <div class="input_title"><span><img src="./static/images/icon1.png" style="margin-right: 8px;" alt="">网站配置</span>
+      </div>
+      <div class="text_row flex">
+        <div class="label">授权码:</div>
+        <input type="text" placeholder="请输入授权码" class="inputList">
+      </div>
+      <div class="text_row flex">
+        <div class="label">系统名称：</div>
+        <input type="text" value="" placeholder="请输入系统名称" class="inputList">
+      </div>
+      <div class="text_row flex">
+        <div class="label">网站域名：</div>
+        <input type="text" placeholder="请输入网站域名" value="http://" class="get-wzym inputList">
+      </div>
+      <div class="text_row flex">
+        <div class="label">后台路径：</div>
+        <input id="htlj" type="text" placeholder="请输入后台路径" value="" class="inputList">
+      </div>
+      <div class="input_title" style="margin-top: 30px;"><span><img src="./static/images/icon2.png"
+            style="margin-right: 8px;" alt="">创始人信息</span></div>
+      <div class="text_row flex">
+        <div class="label">管理员账号：</div>
+        <input id="glyzh" type="text" placeholder="请输入管理员账号" class="inputList">
+      </div>
+      <div class="text_row flex">
+        <div class="label">密码：</div>
+        <div class="dwinpt">
+          <input type="text" placeholder="请输入密码" class="password inputList" id="pwd-rand">
+          <img src="./static/images/rand-icon.png" class="rand-pwd-btn" alt="" style="top: 6px;right:-30px;">
+          <img src="./static/images/yanjing.png" class="showBtn" alt="">
+        </div>
+      </div>
+      <div class="text_row flex">
+        <div class="label">重复密码：</div>
+        <div class="dwinpt">
+          <input type="password" placeholder="请重复输入密码" class="password inputList">
+          <img src="./static/images/yanjing.png" class="showBtn" alt="">
+        </div>
+      </div>
+      <div class="text_row flex">
+        <div class="label">Email：</div>
+        <input type="text" placeholder="请输入电子邮箱" class="inputList">
+        <!-- <select name="" id="houzuiemail" class="youjian">
+                <option>@gmail.com </option>
+                <option>@qq.com </option>
+                <option>@foxmail.com</option>
+                <option>@163.com</option>
+                <option>@sina.com</option>
+                <option>@sina.cn</option>
+                <option>@yahoo.com</option>
+                <option>@126.com</option>
+                <option>@139.com</option>
+                <option>@sohu.com</option>
+                <option>@qmail.com</option>
+                <option>@hotmail.com</option>
+              </select> -->
+      </div>
+      <div class="text_row" style="padding-right: 0;">
+        <div class="errts cerfix" id="tipsInfo"><img style="margin-right: 8px;" src="./static/images/err.png"
+            alt=""><span id="tipsInfoText">数据库连接失败，请重试！</span></div>
+      </div>
+    </div>
+
+
+
+
+    <div class="btnbox">
+      <button style="color: #3699FF;" class="lastStep">上一步</button>
+      <button style="color: white;background-color:#3699FF;" class="nextStep">下一步</button>
+    </div>
+  </div>
+  <!-- 第五步 -->
+  <div class="show_box" id="five">
+    <div class="nav_top cerfix">
+      <img src="./static/images/logo.png" alt="">
+      <h4>智简魔方财务安装向导<span class="edition"></span></h4>
+    </div>
+    <ul class="buzou">
+      <li><b>1</b>检测环境</li>
+      <li><i></i></li>
+      <li><b class="active">2</b>创建数据</li>
+      <li><i></i></li>
+      <li><b>3</b>完成安装</li>
+    </ul>
+    <div class="text_content" style="padding: 40px 30px 0 30px;">
+      <div class="text_contentbg">
+        <ul class="list" id='stepList'>
+          <!-- <li><img src="./static/images/dui.png" alt=""><span>1.进行安装!</span></li>
+            <li><img src="./static/images/dui.png" alt=""><span>2.写入数据库配置！</span></li>
+            <li><img src="./static/images/dui.png" alt=""><span>3.写入数据！</span></li>
+            <li><img src="./static/images/dui.png" alt=""><span>4.写入钩子！</span></li>
+            <li><img src="./static/images/dui.png" alt=""><span>5.写入行为！</span></li>
+            <li><img src="./static/images/dui.png" alt=""><span>6.完成步骤检测与锁定！</span></li> -->
+        </ul>
+      </div>
+      <div class="jindutiao">
+        <div class="jd_lable">正在执行安装</div>
+        <div class="progress">
+          <span class="blue" id="progress" style="width: 0%;"><span></span></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- 第六步 -->
+  <div class="show_box" id="six">
+    <div class="nav_top cerfix">
+      <img src="./static/images/logo.png" alt="">
+      <h4>智简魔方财务安装向导<span class="edition"></span></h4>
+    </div>
+    <ul class="buzou">
+      <li><b>1</b>检测环境</li>
+      <li><i></i></li>
+      <li><b>2</b>创建数据</li>
+      <li><i></i></li>
+      <li><b class="active">3</b>完成安装</li>
+    </ul>
+    <div class="info_content">
+      <h3>恭喜您，安装完成！</h3>
+      <div class="info">
+        <div class="info_textrow">
+          <div class="lable">登录信息</div>
+          <input type="text" class="loginInput" readonly>
+        </div>
+        <div class="info_textrow">
+          <div class="lable">用户名</div>
+          <input type="text" class="loginInput" readonly>
+        </div>
+        <div class="info_textrow">
+          <div class="lable">密码</div>
+          <input type="text" class="loginInput" readonly>
+        </div>
+        <p class="tishi">使用须知: 1.请务必删除/public/install.html 2.请做好定时任务设置，参考教程</p>
+      </div>
+      <div class="btnbox" style="margin-top: 80px;"><button style="color: white;background-color:#3699FF;"
+          onclick="login()">立刻登录</button></div>
+    </div>
+
+  </div>
+
+  <div class="foot_banquan">© 2020-2021 IDCSmart Team</div>
+
+  <script src="./static/js/overall.js"></script>
+  <script src="./static/js/index.js"></script>
+</body>
+
+</html>

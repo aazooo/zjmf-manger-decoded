@@ -1,0 +1,1 @@
+ALTER TABLE `shd_invoice_items` ADD COLUMN `description2` VARCHAR(5000) NOT NULL DEFAULT '' COMMENT '前台账单内页描述' AFTER `description`;

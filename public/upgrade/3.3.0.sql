@@ -1,0 +1,1 @@
+ALTER TABLE `shd_products` ADD COLUMN `upstream_ontrial_status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '上游试用状态:1开启,0未开启';

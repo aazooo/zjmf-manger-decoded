@@ -1,0 +1,1 @@
+ALTER TABLE `shd_products` ADD COLUMN `upstream_auto_setup` varchar(100) NOT NULL DEFAULT '' COMMENT '上游开通方式';

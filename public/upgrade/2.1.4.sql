@@ -1,0 +1,1 @@
+INSERT  INTO `shd_nav`(`id`,`name`,`url`,`pid`,`order`,`fa_icon`,`nav_type`,`relid`,`menuid`) VALUES (37,'信用管理','credit',4,0,'',0,'1',1);

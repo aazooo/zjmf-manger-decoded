@@ -1,0 +1,1 @@
+ALTER TABLE `shd_run_maping` MODIFY COLUMN `active_type_param` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '操作类型对应参数（保持重试，与首次发起的，请求情景一致性）' AFTER `active_type`;

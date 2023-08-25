@@ -1,0 +1,113 @@
+input,
+button,
+select,
+textarea {
+  outline: none !important;
+}
+
+.securityGroup_btn {
+  display: flex;
+}
+
+.modal_main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.redtxt {
+  color: #ff6768;
+}
+
+.expandLine {
+  display: none;
+}
+
+form {
+  width: 100%;
+}
+
+/* 表格表头样式 */
+.layui-table thead tr {
+  background-color: #f5f4f7;
+  color: #999;
+}
+
+/* 表格标题样式 */
+th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+/* 强提醒取消背后半透明颜色 */
+.swal2-container.swal2-shown {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+/* 模态框取消背后半透明颜色 */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* 模态框，强提醒阴影 */
+.swal2-show,
+.modal-content {
+  box-shadow: 0px 6px 14px 2px rgba(6, 31, 179, 0.16);
+}
+
+/* link样式按钮字体大小 */
+.btn-link {
+  font-size: 12px;
+}
+
+/* 模态框footer部分 */
+.modal_limit .modal-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+  position: inherit;
+  height: auto;
+  background-color: #fff;
+}
+
+/* 顶部创建按钮样式 */
+.purple {
+  background-color: #2f54ea;
+  border: 1px solid #2f54ea;
+  border-radius: 4px;
+}
+
+.form-control::placeholder {
+  font-size: 14px;
+}
+
+/* 确认/提交按钮 */
+.confirm-btn {
+  background-color: #2f54ea;
+  border: 1px solid #2f54ea;
+  color: #fff;
+  width: 80px;
+  height: 30px;
+  padding: 0;
+}
+
+.confirm-btn:hover {
+  background-color: #7c91e7;
+  border: 1px solid #7c91e7;
+  color: #fff;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.portRange_box,
+.IPrange_box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0px 8px;
+}
+
+.modal-title {
+  font-size: 16px;
+}

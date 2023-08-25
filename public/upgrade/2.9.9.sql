@@ -1,0 +1,2 @@
+ALTER TABLE `shd_products` 
+MODIFY COLUMN `pay_type` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  COMMENT '付款类型(免费free，一次onetime，周期recurring，天:day，小时:hour，试用ontrial' AFTER `prorata_charge_next_month`;

@@ -1,0 +1,2 @@
+ALTER TABLE `shd_invoices` MODIFY COLUMN `credit_limit_prepayment_invoices` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '提前还款的账单ID';
+UPDATE shd_clients SET phone_code='86' WHERE phone_code='0';

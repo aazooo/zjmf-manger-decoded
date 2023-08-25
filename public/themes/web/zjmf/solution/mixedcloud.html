@@ -1,0 +1,161 @@
+{include file="common/header"  title="灾备解决方案" keywords="$setting.company_name" description="$setting.company_profile" /}
+
+  <div class="pbanner" style="background-image: url({$setting.web_view}/assets/img/solution/sol_mixedCloud-banner.jpg);">
+    <div class="container pl30">
+      <h1>混合云解决方案</h1>
+      <div class="info">
+        提供客户在本地数据中心使用{$setting.company_name}服务的能力，满足客户特定的安全和合规要求，并且通过持续迭代演进，提供满足业务要求的云服务，同时解决部分业务场景低时延的限定要求。
+      </div>
+      <div class="banner-btn">
+        <a href="{$setting.web_url}/contact.html" target="_blank" class="primary">{$Lang.navcontact}</a>
+      </div>
+    </div>
+  </div>
+  <div class="Pro_Anchor">
+    <div class="container">
+      <div style="overflow-x: auto;">
+        <div class="product-nav">
+          <ul>
+            <li class="menuItem active"><a href="#pro-func"><span>方案优势</span></a></li>
+            <li class="menuItem"><a href="#pro-framework"><span>技术架构</span></a></li>
+            <li class="menuItem"><a href="#pro-config"><span>应用场景</span></a></li>
+          </ul>
+        </div>
+        <div class="buy-now"><a href="{$setting.web_url}/contact.html" target="_blank" >{$Lang.navcontact}</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content">
+    <div id="pro-func">
+      <div class="pro-func func2 bgn">
+        <div class="container">
+          <div class="i-title tac mt70 mb30"><span>方案优势</span></div>
+          <div class="row">
+            <ul>
+              <li>
+                <div class="col-lg-3">
+                  <div class="item">
+                    <dl>
+                      <dt><i class="icon iconfont iconomnibearing"></i>全方位混合云架构</dt>
+                      <dd>裸机、虚拟机，全方位的计算服务，公有云、私有云、托管云，全方位的混合云能力。</dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="col-lg-3">
+                  <div class="item">
+                    <dl>
+                      <dt><i class="icon iconfont iconelastic_expand"></i>动态扩展</dt>
+                      <dd>客户在本地数据中心及公有云实现资源混合部署，可充分利用公有云的资源优势实现动态扩展，随时扩充计算和存储资源。</dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="col-lg-3">
+                  <div class="item">
+                    <dl>
+                      <dt><i class="icon iconfont iconcloud_net"></i>云网一体，深度协同</dt>
+                      <dd>通过高速专线服务实现云平台间VPC级别的高质量、安全和高可靠的网络互通。</dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="col-lg-3">
+                  <div class="item">
+                    <dl>
+                      <dt><i class="icon iconfont iconcloud_environment"></i>多云环境的统一管理</dt>
+                      <dd>对接纳管本地私有云（KVM）和VMwarevSphere虚拟化环境，亦支持对接主流公有云资源，最终实现对企业IaaS云计算环境资源的统一管理。</dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pro-framework">
+      <div class="configure bg-img">
+        <div class="container">
+          <div class="i-title tac mt70"><span>技术架构</span></div>
+          <div class="config-box row">
+            <div class="con">
+              <h2 class="mt10">产品架构</h2>
+              客户业务整体上云的架构，受到应用、业务逻辑、特定的硬件要求及制度要求等限制，大都无法在短时间内完整实现。混合云就是为客户解决此痛点需求。
+              <h2 class="mt50">架构说明</h2>
+              {$setting.company_name}混合云架构，将高弹性业务迁入{$setting.company_name}私有网络，关键私密业务及数据保留在客户私有IDC。实现业务按需部署和灵活调度，整体上云。
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pro-config">
+      <div class="configure ">
+        <div class="container">
+          <div class="i-title tac mt70"><span>应用场景</span></div>
+          <div class="config-box row">
+            <div class="config-tab">
+              <div class="w-auto w582">
+                <span class="active">应对业务波峰波谷</span><span>通过混合云快速部署多中心灾备架构</span><span>满足系统的合规与可控要求</span>
+              </div>
+            </div>
+            <div class="config-detail" style="display: block;">
+              <h2 class="mt10">场景描述</h2>
+              <p>互联网应用往往80%的时间流量处于低值，IT系统较为空闲；20%的时间处于流量高并发的波峰（如：O2O、游戏、视频等应用）应对此情况较为经济的解决方案是采用混合云方案。</p>
+              <p class="doc mt20">将平稳的业务处理能力部署于物理架构或私有云，获得更高的资源可控性和性能</p>
+              <p class="doc">使用公有云作为IT架构种可灵活扩展的储备，在访问量升高时，将过多的请求导入公有云业务集群，从而分担业务压力</p>
+            </div>
+            <div class="config-detail">
+              <h2 class="mt10">场景描述</h2>
+              <p>传统的IT架构中，实现多中心容灾需要部署多个几乎一致的数据中心，一般建设周期在6个月至一年，投入巨大，收效甚微。</p>
+              <p class="doc mt20">设计可动态扩容的基础架构</p>
+              <p class="doc">系统正常情况下采用较小状态部署，保证问题发生时可快速扩容</p>
+              <p class="doc">主系统故障时，快速扩容灾备节点到主节点规模，并启用接替主节点工作</p>
+              <p class="doc">主系统故障恢复后，快速缩减灾备节点，至较小规模，确保节省成本</p>
+            </div>
+            <div class="config-detail">
+              <h2 class="mt10">场景描述</h2>
+              <p>对于金融、教育、医疗等敏感应用，要求达到行业或法规要求的合规性，同时对于数据和基础架构资源要求完全可用，这些在传统的架构条件下往往都是难以达到的。</p>
+              <p class="doc mt20">采用混合架构则可满足复杂的合规可控要求</p>
+              <p class="doc">将敏感业务和数据部署在物理架构或私有云，可利用其合规性，满足监管要求</p>
+              <p class="doc">将最终用户访问业务部署在公有云，利用其服务能力，提供更多业务能力支持</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{$setting.web_view}/assets/js/main.js"></script>
+  <script src="{$setting.web_view}/assets/js/stickUp.js"></script>
+    
+  <script type="text/javascript">
+    $(function() {
+      // tab切换
+      $('.configure .config-box .config-tab span').click(function() {
+        var index = $(this).index();
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.configure .config-box .config-detail').eq(index).show().siblings('.config-detail').hide();
+      })
+    })
+    jQuery(function($) {
+      $(document).ready(function() {
+        $('.Pro_Anchor').stickUp({
+          parts: {
+            0: 'pro-func',
+            1: 'pro-framework',
+            2: 'pro-config',
+          },
+          itemClass: 'menuItem',
+          itemHover: 'active',
+          topMargin: "auto"
+        });
+      });
+    });
+  </script>
+{include file="common/footer"  /}

@@ -1,0 +1,180 @@
+<body id="help-page" class="bg-2">
+    {if empty($setting.web_close_mode_message)}
+{include file="common/header"  title="$helpContent.title" keywords="$helpContent.keywords" description="$helpContent.description" /}
+{tagdata name="helpCate,helpContent,newsCate,newsList " /}
+
+<style>
+    pre {
+white-space: normal;
+word-wrap: break-word;
+}
+</style>
+
+  <link rel="stylesheet" href="{$setting.web_view}/assets/css/custom/pages/help.css" />
+  <link rel="stylesheet" href="{$setting.web_view}/assets/css/article.css" />
+  <section class="page-hero tos space2x">
+			    	<div class="container page-hero-text">
+			    		<div class="row">
+			    			<div class="col-sm-6">
+			    				<h2>{$helpContent.title}</h2>
+			    				<p class="hero-slogan">发布时间:{$helpContent.push_time | date='Y-m-d H:i'}</p>
+			    			</div>
+			    		</div>
+			    	</div>
+  </section>
+  <section class="article-section space2x">
+    <div class="container">
+		<div class="row" style="margin-top: 30px;">
+			<div class="col-md-9">
+			    
+			    <div class="article-content bg-white">
+		            <ol class="breadcrumb entry-breadcrumb">
+			            			            <li><i class="fas fa-map-marker-alt mr-1"></i> <a href="{$setting.web_url}">首页</a></li>
+			            			            <li><a href="#">{$helpContent.cate_name}</a></li>
+			            			        </ol>
+		            <div class="article-body">
+			            <article class="entry py-3">
+				        	<div class="entry-head">
+		                        <h1 class="entry-title">{$helpContent.title}</h1>
+		                        <div class="entry-info">
+		                            <span>{$helpContent.push_time | date='Y-m-d H:i'}</span>
+		                           
+		                        </div>
+		                    </div>
+		                    <div class="entry-content">
+			                {$helpContent.content}
+		                    </div>
+
+			            </article>
+		            </div>
+				</div>
+		
+			</div>
+			<div class="col-md-3">
+				<div class="article-sidebar">
+
+					<div class="widget widget_recent_entries">
+						<h3 class="widget-title"><span>分类目录</span></h3>
+						<ul>
+
+				            {foreach $helpCate as $key=>$vo }
+				            <li>
+								<a href="/helpcategory/{$vo.id}.html">{$vo.title}</a>
+							</li>
+                            {/foreach}
+            
+				        							</ul>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+    </div>
+</section>
+  
+ 
+
+{else/}
+{include file="common/header"  title="抱歉,我们暂时进入了维护模式" keywords="$setting.web_seo_keywords" description="$setting.web_seo_desc" /}
+<style>
+/*样式*/
+#notfound {
+
+  position: relative;
+  padding: 160px 0 100px;
+}
+
+.notfound {
+  width: 100%;
+}
+.notfound .notfound-404 {
+  position: relative;
+  z-index: -1;
+}
+.notfound .notfound-404 h1 {
+  font-family: sans, sans-serif !important;
+  font-size: 170px;
+  margin: 0px;
+  font-weight: 900;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background: url('{$setting.web_view}/assets/images/pages/404/bg.jpg') no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: cover;
+  background-position: center;
+}
+.notfound h2 {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--typeColor);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 30px;
+}
+.notfound p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: rgba(3, 27, 78, 0.7);
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 auto 30px;
+  max-width: 410px;
+}
+.notfound a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: var(--thBlue);
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: 700;
+  -webkit-transition: background .3s ease;
+  transition: background .3s ease;
+
+}
+.notfound a:hover {
+  background: var(--thDarBlue);
+}
+/*样式*/
+@media only screen and (max-width: 767px) {
+  #notfound {
+    padding: 130px 0 70px;
+  }
+  .notfound .notfound-404 h1 {
+    font-size: 112px;
+  }
+  .notfound h2 {
+    margin-top: 25px;
+  }
+  .notfound a {
+    padding: 12px 25px;
+  }
+}
+/*样式*--/
+ </style>
+
+  <div id="notfound" class="d-flex align-items-center justify-content-center">
+    <div class="notfound text-center">
+      <div class="container">
+        <div class="notfound-404">
+          <h1>Oops!</h1>
+        </div>
+        <h2>很抱歉，我们暂时进入了维护~</h2>
+        <p>原因为{$setting.web_close_mode_message}</p>
+      </div>
+    </div>
+  </div>
+{/if}
+  
+
+
+  {include file="common/footer"  /}
+
+  </body>
+ 

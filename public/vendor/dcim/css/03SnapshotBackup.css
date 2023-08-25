@@ -1,0 +1,8 @@
+.snapShot_btn,
+.backup_btn {
+  display: flex;
+}
+
+.backup_btn {
+  margin-top: 31px;
+}

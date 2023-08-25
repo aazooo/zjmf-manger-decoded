@@ -1,0 +1,2 @@
+ALTER TABLE `shd_product_first_groups` ADD COLUMN `is_upstream` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否上游资源分组';
+ALTER TABLE `shd_product_first_groups` ADD COLUMN `zjmf_api_id` INT(11) NOT NULL DEFAULT 0 COMMENT '上游资源ID';

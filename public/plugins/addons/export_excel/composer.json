@@ -1,0 +1,15 @@
+{
+    "name": "vendor/export_excel",
+    "description": "ExportExecl",
+    "type": "cmf-plugin",
+    "license": "apache2.0",
+    "authors": [
+        {
+            "name": "test",
+            "email": "test@qq.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.17"
+    }
+}

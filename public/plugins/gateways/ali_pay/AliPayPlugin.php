@@ -1,99 +1,159 @@
 <?php
+
 namespace gateways\ali_pay;
 
 use app\admin\lib\Plugin;
-use gateways\ali_pay\pagepay\service\AlipayTradeService;
-use gateways\ali_pay\controller\ConfigController;
-use gateways\ali_pay\pagepay\buildermodel\AlipayTradePagePayContentBuilder;
-use gateways\ali_pay\validate\AliPayValidate;
+use gateways\ali_pay\lib\AlipayTradeService;
 
 class AliPayPlugin extends Plugin
 {
 
     public $info = array(
-        'name'        => 'AliPay',//Demo插件英文名，改成你的插件英文就行了
-        'title'       => '支付宝支付插件',
-        'description' => '支付宝支付插件',
+        'name'        => 'AliPay',
+        'title'       => '支付宝支付',
+        'description' => '支付宝官方接口',
         'status'      => 1,
         'author'      => '顺戴网络',
         'version'     => '1.0',
-        'module'        => 'gateways'
+        'module'      => 'gateways',
     );
 
-    public $hasAdmin = 0;//插件是否有后台管理界面
+    public $hasAdmin = 0;
 
     // 插件安装
     public function install()
     {
-        return true;//安装成功返回true，失败false
+        return true;
     }
 
     // 插件卸载
     public function uninstall()
     {
-        return true;//卸载成功返回true，失败false
+        return true;
     }
 
-    public function aliPayHandle($param)
+    public function AliPayHandle($param)
     {
-        $aliValidate = new AliPayValidate();
-        if(!$aliValidate->check($param)){
-            return json(['data'=>$param,'status'=>400,'msg'=>$aliValidate->getError()]);
+        $config = $this->config();
+
+        if(in_array('wap', $config['product']) && $this->isMobile()){
+            return $this->wapPay($config, $param);
+        }elseif(in_array('pc', $config['product']) && !$this->isMobile()){
+            return $this->pcPay($config, $param);
+        }elseif(in_array('qr', $config['product'])){
+            return $this->qrPay($config, $param);
+        }else{
+            throw new \Exception('未选择任何可用的支付产品');
+        }
+    }
+
+    private function pcPay($config, $param)
+    {
+        $domain = configuration('domain');
+
+        $config['notify_url'] = $domain . '/gateway/ali_pay/index/notifyHandle';
+        $config['return_url'] = $domain . '/gateway/ali_pay/index/returnHandle';
+        $bizContent = [
+			'out_trade_no' => $param['out_trade_no'],
+			'total_amount' => $param['total_fee'],
+			'subject' => $param['product_name'],
+		];
+		$bizContent['business_params'] = ['mc_create_trade_ip' => get_client_ip()];
+
+        try{
+			$aop = new AlipayTradeService($config);
+			$url = $aop->pagePay($bizContent);
+		}catch(\Exception $e){
+            throw new \Exception('支付宝下单失败:'.$e->getMessage());
+		}
+
+        $reData = ['type' => 'jump', 'data' => $url];
+        return $reData;
+    }
+
+    private function wapPay($config, $param)
+    {
+        $domain = configuration('domain');
+
+        $config['notify_url'] = $domain . '/gateway/ali_pay/index/notifyHandle';
+        $config['return_url'] = $domain . '/gateway/ali_pay/index/returnHandle';
+        $bizContent = [
+			'out_trade_no' => $param['out_trade_no'],
+			'total_amount' => $param['total_fee'],
+			'subject' => $param['product_name'],
+		];
+		$bizContent['business_params'] = ['mc_create_trade_ip' => get_client_ip()];
+
+        try{
+			$aop = new AlipayTradeService($config);
+			$url = $aop->wapPay($bizContent);
+		}catch(\Exception $e){
+            throw new \Exception('支付宝下单失败:'.$e->getMessage());
+		}
+
+        $reData = ['type' => 'jump', 'data' => $url];
+        return $reData;
+    }
+
+    private function qrPay($config, $param)
+    {
+        $domain = configuration('domain');
+
+        $config['notify_url'] = $domain . '/gateway/ali_pay/index/notifyHandle';
+        $bizContent = [
+			'out_trade_no' => $param['out_trade_no'],
+			'total_amount' => $param['total_fee'],
+			'subject' => $param['product_name'],
+		];
+		$bizContent['business_params'] = ['mc_create_trade_ip' => get_client_ip()];
+
+        try{
+			$aop = new AlipayTradeService($config);
+			$result = $aop->qrPay($bizContent);
+		}catch(\Exception $e){
+            throw new \Exception('支付宝下单失败:'.$e->getMessage());
+		}
+		$code_url = $result['qr_code'];
+
+        $reData = ['type' => 'url', 'data' => $code_url];
+        return $reData;
+    }
+
+    public function config()
+    {
+        $name = $this->info['name'];
+
+        $config = db('plugin')->where('name', $name)->value('config');
+        if (!empty($config) && $config != "null") {
+            $config = json_decode($config, true);
+        } else {
+            return json(['msg'=>'请先将配置好商户信息','status'=>400]);
         }
 
-        $data['currency'] = $param['fee_type'];
-        $data['body'] = $param['product_name'];
-        $data['out_trade_no'] = $param['out_trade_no'];
-        $data['subject'] = $param['product_name'];
-        $data['total_amount'] = $param['total_fee'];
-        $data['qr_pay_mode'] = 4; //> 二维码模式 可选
-        $data['qrcode_width'] = $param['qrcode_width']??200; //> 二维码宽度 可选
-        $data['passback_params'] = $param['attach']; //> 组合数据
+        $product = [];
+        if($config['product_pc'] == 1) $product[] = 'pc';
+        if($config['product_wap'] == 1) $product[] = 'wap';
+        if($config['product_qr'] == 1) $product[] = 'qr';
 
-        $Con = new ConfigController();
-        $config = $Con->getConfig();
-        //商户订单号，商户网站订单系统中唯一订单号，必填
-        $out_trade_no = trim($data['out_trade_no']);
-        //订单标题，必填
-        $subject = trim($data['subject']);
-        //付款金额，必填
-        $total_amount = trim($data['total_amount']);
-        //商品描述，可空
-        $body = trim($data['body']);
+        return [
+            'app_id' => $config['app_id'],
+            'alipay_public_key' => $config['alipay_public_key'],
+            'app_private_key' => $config['merchant_private_key'],
+            'pageMethod' => '1',
+            'product' => $product
+        ];
+    }
 
-        //构造参数
-        $payRequestBuilder = new AlipayTradePagePayContentBuilder();
-        $payRequestBuilder->setBody($body);
-        $payRequestBuilder->setSubject($subject);
-        $payRequestBuilder->setTotalAmount($total_amount);
-        $payRequestBuilder->setOutTradeNo($out_trade_no);
-
-        $bizcontent = array(
-            //> 这里添加额外参数
-            'qr_pay_mode'   =>  $data['qr_pay_mode'],
-            'qrcode_width'  =>   $data['qrcode_width'],
-            'passback_params'   => $data['passback_params'],
-        );
-        $payRequestBuilder->setBizArr($bizcontent);
-
-        $aop = new AlipayTradeService($config);
-
-        /**
-         * pagePay 电脑网站支付请求
-         * @param $builder 业务参数，使用buildmodel中的对象生成。
-         * @param $return_url 同步跳转地址，公网可以访问
-         * @param $notify_url 异步通知地址，公网可以访问
-         * @return $response 支付宝返回的信息
-         */
-        $response = $aop->pagePay($payRequestBuilder,$config['return_url'],$config['notify_url'],true);
-
-        //输出表单
-        $reData = array(
-            'type'=>'insert',
-            'data'  =>  $response,
-        );
-        return $reData;
-//        echo $response;exit;
+    private function isMobile()
+    {
+        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $ualist = array('android', 'midp', 'nokia', 'mobile', 'iphone', 'ipod', 'blackberry', 'windows phone');
+        foreach($ualist as $ua){
+            if(strpos($useragent, $ua)!==false){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

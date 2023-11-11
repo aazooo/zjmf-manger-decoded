@@ -8,59 +8,52 @@
 // +----------------------------------------------------------------------
 return [
 
-    'module_name'          => [// 在后台插件配置表单中的键名 ,会是config[text]
-        'title' => '名称', // 表单的label标题
-        'type'  => 'text', // 表单的类型：text,password,textarea,checkbox,radio,select等
-        'value' => '支付宝扫码支付', // 表单的默认值
-        'tip'   => '友好的显示名称', //表单的帮助提示
-    ],
-//    'idcsmart_auth_code'          => [// 在后台插件配置表单中的键名 ,会是config[text]
-//        'title' => '授权码', // 表单的label标题
-//        'type'  => 'text', // 表单的类型：text,password,textarea,checkbox,radio,select等
-//        'value' => '支付宝支付', // 表单的默认值
-//        'tip'   => '友好的显示名称', //表单的帮助提示
-//    ],
-//    'seller_id'      => [//
-//        'title' => '卖家支付宝帐户',
-//        'type'  => 'text',
-//        'value' => '',
-//        'tip'   => '需要申请支付宝商家集成',
-//    ],
-    'app_id'      => [
-        'title' => 'appID',
+    'app_id' => [
+        'title' => '应用ID',
         'type'  => 'text',
         'value' => '',
         'tip'   => '',
     ],
-    'merchant_private_key'      => [
-        'title' => '商户私钥',
+    'merchant_private_key' => [
+        'title' => '应用私钥',
         'type'  => 'text',
         'value' => '',
         'tip'   => '',
     ],
-    'alipay_public_key'      => [
+    'alipay_public_key' => [
         'title' => '支付宝公钥',
         'type'  => 'text',
         'value' => '',
         'tip'   => '',
     ],
-//    'currency'      => [
-//        'title' => '支持货币单位',
-//        'type'  => 'text',
-//        'value' => '',
-//        'tip'   => '',
-//    ],
-
-
-//    'radio'         => [
-//        'title'   => '模式',
-//        'type'    => 'radio',
-//        'options' => [
-//            '1' => '调试',
-//            '2' => '上线',
-//        ],
-//        'value'   => '1',
-//        'tip'     => '开发组件',
-//    ],
-
+    'product_pc' => [
+        'title' => '电脑网站支付',
+        'type' => 'select',
+        'options' => [
+            '1' => '开启',
+            '0' => '关闭',
+        ],
+        'value' => '1',
+        'tip' => '',
+    ],
+    'product_wap' => [
+        'title' => '手机网站支付',
+        'type' => 'select',
+        'options' => [
+            '1' => '开启',
+            '0' => '关闭',
+        ],
+        'value' => '1',
+        'tip' => '',
+    ],
+    'product_qr' => [
+        'title' => '当面付',
+        'type' => 'select',
+        'options' => [
+            '1' => '开启',
+            '0' => '关闭',
+        ],
+        'value' => '0',
+        'tip' => '',
+    ],
 ];

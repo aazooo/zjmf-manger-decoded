@@ -2,101 +2,125 @@
 
 namespace gateways\wx_pay\controller;
 
+use app\home\controller\OrderController;
 use think\Controller;
-use gateways\wx_pay\lib\WxPayConfig;
-use gateways\wx_pay\lib\WxPayApi;
-use gateways\wx_pay\lib\WxPayOrderQuery;
-use think\Request;
-require_once dirname(__DIR__) . '/lib/WxPayData.php';
-
+use gateways\wx_pay\WxPayPlugin;
+use gateways\wx_pay\lib\PaymentService;
+use gateways\wx_pay\lib\JsApiTool;
 
 class IndexController extends Controller
 {
 
     /**
-     * 回调入口
+     * 微信JSAPI支付
+     */
+    public function jsapipay()
+    {
+        $orderid = input('orderid');
+        if(!$orderid) return $this->showerrmsg('no orderid');
+        $param = cache('wxjspay_'.$orderid);
+        if(!$param) return $this->showerrmsg('订单不存在或已超时');
+
+        $class = new WxPayPlugin();
+        $config = $class->config();
+
+        try{
+			$tools = new JsApiTool($config['appid'], $config['appsecret']);
+			$openid = $tools->GetOpenid();
+		}catch(\Exception $e){
+            return $this->showerrmsg($e->getMessage());
+		}
+
+        $domain = configuration('domain');
+
+        $out_trade_no = date('Ymd').$param['out_trade_no'];
+
+        $params = [
+            'body' => $param['product_name'],
+            'out_trade_no' => $out_trade_no,
+            'total_fee' => strval($param['total_fee']*100),
+            'spbill_create_ip' => get_client_ip(),
+            'notify_url' => $domain . '/gateway/wx_pay/index/notifyHandle',
+            'openid' => $openid,
+        ];
+        $client = new PaymentService($config);
+        try{
+            $result = $client->jsapiPay($params);
+            $jsapidata = json_encode($result);
+        }catch(\Exception $e){
+            return $this->showerrmsg('微信支付下单失败:'.$e->getMessage());
+        }
+
+        $this->assign('company_name', configuration('company_name'));
+        $this->assign('jsapidata', $jsapidata);
+        $tpl_path = CMF_ROOT.'public/plugins/gateways/wx_pay/template/jsapipay.tpl';
+        return $this->fetch($tpl_path);
+    }
+
+    private function showerrmsg($msg){
+        $this->assign('company_name', configuration('company_name'));
+        $this->assign('msg', $msg);
+        $tpl_path = CMF_ROOT.'public/plugins/gateways/wx_pay/template/errmsg.tpl';
+        return $this->fetch($tpl_path);
+    }
+
+    /**
+     * 异步回调
      */
     public function notifyHandle()
     {
+        $isSuccess = true;
+        $class = new WxPayPlugin();
+        $config = $class->config();
+		try{
+			$client = new PaymentService($config);
+			$result = $client->notify();
 
-        $config = new WxPayConfig();
-        trace("begin notify",'debug');
-        $noyify = new NotifyController();
-        $noyify->Handle($config, false);
-        trace("end notify",'debug');
+            $invoice_id = substr($result['out_trade_no'], 8);
+            $data = array(
+                'invoice_id' => $invoice_id,
+                'trans_id' => $result['transaction_id'],
+                'currency' => $result['fee_type'] ?? 'CNY',
+                'payment' => $class->info['name'],
+                'amount_in' => $result['total_fee']/100,
+                'paid_time' => $result['time_end'],
+            );
+
+            $Order = new OrderController();
+            $Order->orderPayHandle($data);
+
+            if(cache('wxjspay_'.$invoice_id)){
+                cache('wxjspay_'.$invoice_id, null);
+            }
+
+		}catch(Exception $e){
+			$isSuccess = false;
+			$errmsg = $e->getMessage();
+		}
+
+		$client->replyNotify($isSuccess, $errmsg);
         exit;
     }
 
-
-
     /**
-     * 查询订单
-     * @param $transaction_id
-     * @return bool
-     * @throws \plugins\wx_pay\lib\WxPayException
+     * 同步回调
      */
-    public function queryOrder($transaction_id)
+    public function returnHandle()
     {
-
-        trace('进入了queryOrder:','info');
-        $transaction_id = $transaction_id??'test_product_2019111226';
-        $input = new WxPayOrderQuery();
-        $input->SetTransaction_id($transaction_id);
-
-        $config = new WxPayConfig();
-        trace('config:'.json_encode($config),'info');
-
-        $result = WxPayApi::orderQuery($config, $input);
-        trace("query:" . json_encode($result));
-        if(array_key_exists("return_code", $result)
-            && array_key_exists("result_code", $result)
-            && $result["return_code"] == "SUCCESS"
-            && $result["result_code"] == "SUCCESS")
-        {
-            return json(['msg'=>'已支付','status'=>200]);
-        }
-        return json(['msg'=>'未支付','status'=>400]);
+        return redirect(config('return_url'));
     }
 
     /**
-     * 通过商户订单号查询订单
+     * 获取支付信息
      */
-    public function queryMerchantOrder(Request $request)
+    public function getPayment($payCode)
     {
-        $out_trade_no = $request->post('out_trade_no');
-        if(empty($out_trade_no)){
-            return json(['status'=>400,'msg'=>'error']);
+        $payment = $this->where("enabled=1 AND payCode='$payCode' AND isOnline=1")->find();
+        $payConfig = json_decode($payment["payConfig"]);
+        foreach ($payConfig as $key => $value) {
+            $payment[$key] = $value;
         }
-        try{
-            $input = new WxPayOrderQuery();
-            $input->SetOut_trade_no($out_trade_no);
-            $config = new WxPayConfig();
-            $res = WxPayApi::orderQuery($config, $input);
-            if($res['trade_state'] == 'SUCCESS'){
-                # TODO WYH 20201029
-                //$out_trade_no = explode('a',$out_trade_no)[0];
-
-                $subtotal = db('invoices')->where('id',$out_trade_no)->value('subtotal');
-                if($res['total_fee'] == $subtotal){
-                    return json(['type'=>'SUCCESS','msg'=>'已支付','status'=>200]);
-                }else{
-                    $data = ['subtotal'=>$subtotal,'total_fee'=>$res['total_fee'],'id'=>$out_trade_no];
-                    trace('异常的支付:'.json_encode($data),'info');
-                    hook('user_action_log');
-                    return json(['type'=>'SUCCESS','msg'=>'异常的支付','status'=>200]);
-                }
-            }elseif($res['trade_state'] == 'USERPAYING'){
-                return json(['type'=>'USERPAYING','msg'=>'支付中','status'=>200]);
-            }elseif($res['trade_state'] == 'PAYERROR'){
-
-                return json(['type'=>'PAYERROR','msg'=>'支付失败','status'=>200]);
-            }elseif($res['trade_state'] == 'NOTPAY'){
-                return json(['type'=>'NOTPAY','msg'=>'未支付','status'=>200]);
-            }
-        } catch(\Exception $e) {
-            \Log::ERROR(json_encode($e));
-        }
-        return json(['status'=>400,'msg'=>'交易未完成']);
+        return $payment;
     }
 
 }

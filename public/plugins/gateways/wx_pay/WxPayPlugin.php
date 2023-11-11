@@ -1,132 +1,160 @@
 <?php
+
 namespace gateways\wx_pay;
 
 use app\admin\lib\Plugin;
-use cmf\phpqrcode\QRcode;
-use gateways\wx_pay\validate\WxPayValidate;
-use gateways\wx_pay\lib\WxPayConfig;
-use gateways\wx_pay\lib\WxPayUnifiedOrder;
-use gateways\wx_pay\lib\WxPayApi;
-use think\Db;
-
-require_once __DIR__ . '/lib/WxPayApi.php';
-require_once __DIR__ . '/lib/WxPayData.php';
-require_once __DIR__ . '/lib/WxPayConfig.php';
+use gateways\wx_pay\lib\PaymentService;
 
 class WxPayPlugin extends Plugin
 {
-    // 验证失败是否抛出异常
-    protected $failException = true;
 
     public $info = array(
         'name'        => 'WxPay',
         'title'       => '微信支付',
-        'description' => '微信支付',
+        'description' => '微信支付官方接口',
         'status'      => 1,
         'author'      => '顺戴网络',
         'version'     => '1.0',
-        'module'        => 'gateways',
+        'module'      => 'gateways',
     );
 
-    public $hasAdmin = 0;//插件是否有后台管理界面
+    public $hasAdmin = 0;
 
     // 插件安装
     public function install()
     {
-        return true;//安装成功返回true，失败false
+        return true;
     }
 
     // 插件卸载
     public function uninstall()
     {
-        // 在这里不要try catch数据库异常，直接抛出上层会处理异常后回滚的
-        return true;//卸载成功返回true，失败false
+        return true;
     }
 
-//
-    public function wxpayHandle($param)
+    public function WxPayHandle($param)
     {
-        $validate = new WxPayValidate();
-        if(!$validate->check($param)){
-            return ['status'=>400,'msg'=>$validate->getError()];
-        }
-        $domain = configuration('domain');
-        $data['product_id'] = $param['out_trade_no'];
-        $data['total_fee'] = $param['total_fee']*100; //> 单位分
-        $data['out_trade_no'] = 'shd_'.date('Ymd').$param['out_trade_no'];
-        $data['notify_url'] =  "{$domain}/gateway/wx_pay/index/notifyHandle";
-        $data['trade_type'] =  'NATIVE';
-        $data['product_name'] =  $param['product_name'];
-        $data['attach'] =  $param['attach'];
-        $data['fee_type'] =  'CNY'; //> 境内商户仅支持人名币
-//
-        //获取订单号,如未设置获取默认自定义规则
-        if(!array_key_exists('out_trade_no',$data))
-        {
-            $data['out_trade_no'] = rand(100,999).date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-        }
-        //获取支付类型默认是Native
-        if(!array_key_exists('trade_type',$data))
-        {
-            $data['trade_type'] = 'Native';
-        }
-        return $this->setPay($data);
-    }
+        $config = $this->config();
 
-    public function setPay($param)
-    {
-//      rand(100,999).date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)
-        $input = new WxPayUnifiedOrder();
-        $input->SetBody($param['product_name']); //商品名称
-        $input->SetOut_trade_no($param['out_trade_no']); //商品订单号
-        $input->SetTotal_fee($param['total_fee']);  //商品价格以分为初始单位
-        $input->SetNotify_url($param['notify_url']); //回调地址
-        $input->SetTrade_type($param['trade_type']);  //支付方式
-        $input->SetProduct_id($param['product_id']); //商品自定义id
-        $input->SetAttach($param['attach']); //商品自定义id
-        $result = $this->GetPayUrl($input);
-        //var_dump($input);die;
-        //> 生成二维码
-        if($result){
-            trace(json_encode($result));
-            $reData = array(
-                'type'=>'url',
-                'data'  =>  $result['code_url'],
-            );
-            if(!$result['code_url']){
-                $reData['error'] = $result['err_code_des'];
-            }
-            return $reData;
-//            echo QRcode::png($result['code_url']);
-            exit;
+        if(in_array('wap', $config['product']) && $this->isMobile() && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')===false){
+            return $this->wapPay($config, $param);
+        }elseif(in_array('native', $config['product'])){
+            return $this->nativePay($config, $param);
+        }elseif(in_array('jsapi', $config['product'])){
+            return $this->jsapiPay($config, $param);
         }else{
-            return ['status'=>400,'msg'=>'二维码制作失败'];
+            throw new \Exception('未选择任何可用的支付产品');
         }
     }
 
-    /**
-     * 生成直接支付url，支付url有效期为2小时,模式二
-     * @param UnifiedOrderInput $input
-     */
-    public function GetPayUrl($input)
+    private function nativePay($config, $param){
+        
+        $domain = configuration('domain');
+
+        $out_trade_no = date('Ymd').$param['out_trade_no'];
+
+        $params = [
+            'body' => $param['product_name'],
+            'out_trade_no' => $out_trade_no,
+            'total_fee' => strval($param['total_fee']*100),
+            'spbill_create_ip' => get_client_ip(),
+            'notify_url' => $domain . '/gateway/wx_pay/index/notifyHandle',
+            'product_id' => '01001',
+        ];
+        $client = new PaymentService($config);
+        try{
+            $result = $client->nativePay($params);
+            $code_url = $result['code_url'];
+        }catch(\Exception $e){
+            throw new \Exception('微信支付下单失败:'.$e->getMessage());
+        }
+
+        $reData = ['type' => 'url', 'data' => $code_url];
+        return $reData;
+    }
+
+    private function jsapiPay($config, $param){
+        cache('wxjspay_'.$param['out_trade_no'], $param, 600);
+
+        $domain = configuration('domain');
+        $url = $domain . '/gateway/wx_pay/index/jsapipay?orderid='.$param['out_trade_no'];
+
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')!==false){
+            $reData = ['type' => 'jump', 'data' => $url];
+        }else{
+            $reData = ['type' => 'url', 'data' => $url];
+        }
+        return $reData;
+    }
+
+    private function wapPay($config, $param){
+        
+        $domain = configuration('domain');
+
+        $out_trade_no = date('Ymd').$param['out_trade_no'];
+
+        $scene_info = [
+            'h5_info' => [
+                'type' => 'Wap',
+                'wap_url' => $domain,
+                'wap_name' => configuration('company_name')
+            ]
+        ];
+        $params = [
+            'body' => $param['product_name'],
+            'out_trade_no' => $out_trade_no,
+            'total_fee' => strval($param['total_fee']*100),
+            'spbill_create_ip' => get_client_ip(),
+            'notify_url' => $domain . '/gateway/wx_pay/index/notifyHandle',
+            'scene_info' => json_encode($scene_info, JSON_UNESCAPED_UNICODE),
+        ];
+        $client = new PaymentService($config);
+        try{
+            $result = $client->h5Pay($params);
+            $redirect_url = $domain . '/gateway/wx_pay/index/returnHandle';
+            $url = $result['mweb_url'].'&redirect_url='.urlencode($redirect_url);
+        }catch(\Exception $e){
+            throw new \Exception('微信支付下单失败:'.$e->getMessage());
+        }
+
+        $reData = ['type' => 'jump', 'data' => $url];
+        return $reData;
+    }
+
+    public function config()
     {
-        if($input->GetTrade_type() == "NATIVE")
-        {
-            try{
-                $config = new WxPayConfig();
-                $WxPayApi = new WxPayApi();
-                $result = $WxPayApi->unifiedOrder($config, $input);
-                return $result;
-            } catch(\Exception $e) {
-                \Log::ERROR(json_encode($e));
+        $name = $this->info['name'];
+
+        $config = db('plugin')->where('name', $name)->value('config');
+        if (!empty($config) && $config != "null") {
+            $config = json_decode($config, true);
+        } else {
+            return json(['msg'=>'请先将配置好商户信息','status'=>400]);
+        }
+
+        $product = [];
+        if($config['ProductNative'] == 1) $product[] = 'native';
+        if($config['ProductJsapi'] == 1) $product[] = 'jsapi';
+        if($config['ProductWap'] == 1) $product[] = 'wap';
+        
+        return [
+            'appid' => $config['AppId'],
+            'mchid' => $config['MerchantId'],
+            'apikey' => $config['Key'],
+            'appsecret' => $config['AppSecret'],
+            'product' => $product
+        ];
+    }
+
+    private function isMobile()
+    {
+        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $ualist = array('android', 'midp', 'nokia', 'mobile', 'iphone', 'ipod', 'blackberry', 'windows phone');
+        foreach($ualist as $ua){
+            if(strpos($useragent, $ua)!==false){
+                return true;
             }
         }
         return false;
     }
-    //获取商品名称
-    public function getProductName()
-    {
-
-    }
-
 }

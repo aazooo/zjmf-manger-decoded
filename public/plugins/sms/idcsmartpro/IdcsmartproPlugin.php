@@ -13,7 +13,7 @@ class IdcsmartproPlugin extends Plugin
         'description' => '智简魔方官方短信平台接口',
         'status'      => 1,
         'author'      => '智简魔方',
-        'version'     => '1.0',
+        'version'     => '1.0.1',
         'help_url'     => 'https://market.idcsmart.com/cart?fid=1&gid=22',//申请接口地址
     );
 
@@ -208,6 +208,8 @@ class IdcsmartproPlugin extends Plugin
         $content=$this->templateParam($params['content'],$params['templateParam']);
         $param['to']=trim($params['mobile']);
 		$param['content']=$this->templateSign($params['config']['sign']).$content;
+		$param['template_id']=trim($params['template_id']);
+		$param['vars']=$params['templateParam'];
         $resultTemplate= $this->APIHttpRequestCURL("send",$param,$params['config'],'POST');
 		if($resultTemplate['status']==200){
 			$data['status']="success";

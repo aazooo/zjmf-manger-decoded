@@ -7,41 +7,58 @@
 // | Author: Dean <zxxjjforever@163.com>
 // +----------------------------------------------------------------------
 return[
-    'module_name'          => [// 在后台插件配置表单中的键名 ,会是config[text]
-        'title' => '名称', // 表单的label标题
-        'type'  => 'text', // 表单的类型：text,password,textarea,checkbox,radio,select等
-        'value' => '微信支付', // 表单的默认值
-        'tip'   => '', //表单的帮助提示
-    ],
     'AppId'=>[
-        'title'=>'AppId',
+        'title'=>'APPID',
         'type'=>'text',
         'value'=>'',
-        'tip'=>'配置信息'
+        'tip'=>'需绑定至微信支付商户'
     ],
     'MerchantId'=>[
-        'title'=>'MerchantId',
+        'title'=>'商户号',
         'type'=>'text',
         'value'=>'',
-        'tip'=>'配置信息'
+        'tip'=>''
     ],
     'Key'=>[
-        'title'=>'Key',
+        'title'=>'商户APIv2密钥',
         'type'=>'text',
         'value'=>'',
-        'tip'=>'商户配置信息'
+        'tip'=>''
     ],
     'AppSecret'=>[
-        'title'=>'AppSecret',
+        'title'=>'APPSECRET',
         'type'=>'text',
         'value'=>'',
-        'tip'=>'配置信息'
+        'tip'=>'仅JSAPI支付需要配置'
     ],
-//    'currency'      => [
-//        'title' => '支持货币单位',
-//        'type'  => 'text',
-//        'value' => '',
-//        'tip'   => '',
-//    ],
-
+    'ProductNative' => [
+        'title' => 'NATIVE支付',
+        'type' => 'select',
+        'options' => [
+            '1' => '开启',
+            '0' => '关闭',
+        ],
+        'value' => '1',
+        'tip' => '',
+    ],
+    'ProductJsapi' => [
+        'title' => 'JSAPI支付',
+        'type' => 'select',
+        'options' => [
+            '1' => '开启',
+            '0' => '关闭',
+        ],
+        'value' => '0',
+        'tip' => '',
+    ],
+    'ProductWap' => [
+        'title' => 'H5支付',
+        'type' => 'select',
+        'options' => [
+            '1' => '开启',
+            '0' => '关闭',
+        ],
+        'value' => '0',
+        'tip' => '',
+    ],
 ];

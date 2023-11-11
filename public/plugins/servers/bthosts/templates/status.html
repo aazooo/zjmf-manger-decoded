@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    div {
+      outline: none;
+    }
+
+
+    /* 火柴棍标题 */
+    .page-title {
+      display: inline-block;
+      width: 300px;
+      height: 28px;
+      line-height: 28px;
+      font-size: 22px;
+      border-left: 4px solid #007bfc;
+      margin: 29px 0 30px 0;
+      text-indent: 29px;
+    }
+
+    .tips {
+      border-radius: 4px;
+      box-sizing: border-box;
+      padding: 20px 30px;
+      background-color: #e6f2ff;
+      border: 1px solid #cce5fe;
+      font-size: 14px;
+      color: #606266;
+    }
+
+    .table-main {
+      display: inline-table;
+      border-spacing: 0;
+      border-collapse: separate;
+      border: 1px solid #ebeef5;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    table,
+    td,
+    th {
+      box-sizing: border-box;
+      padding: 12px 5px;
+      font-size: 14px;
+      transition: all 0.2s;
+      border-radius: 5px;
+    }
+
+    th {
+      text-align: left;
+      border-bottom: 1px solid #ebeef5;
+      color: #7c7c7c;
+      overflow: hidden;
+      box-sizing: border-box;
+      user-select: none;
+    }
+    
+ @media screen and (max-width: 600px) {
+
+    table {
+      border: 0;
+    }
+
+    table thead {
+      display: none;
+    }
+
+    table tr {
+      margin-bottom: 10px;
+      display: block;
+      border-bottom: 2px solid #ddd;
+    }
+
+    table td {
+      display: block;
+      text-align: right;
+      font-size: 13px;
+      border-bottom: 1px dotted #ccc;
+    }
+
+    table td:last-child {
+      border-bottom: 0;
+    }
+
+    table td:before {
+      content: attr(data-label);
+      float: left;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  }
+  
+    td {
+      color: #333;
+    }
+   
+    tr:hover td {
+      background-color: #f5f7fa;
+    }
+
+    .mount,
+    .uninstall {
+      float: left;
+      padding: 5px 10px;
+      background-color: #ace;
+      margin-right: 10px;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .mount:hover {
+      background-color: #46a0ff;
+    }
+
+    .mount {
+      background-color: #007bfc;
+    }
+
+    .uninstall:hover {
+      background-color: #ff8484;
+    }
+
+    .uninstall {
+      background-color: #F55151;
+    }
+
+    .create {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 30px;
+      border: 1px solid #dcdfe4;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+      width: 150px;
+      height: 40px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .create:hover {
+      border: 1px solid #007bfc;
+    }
+
+    .top {
+      display: flex;
+      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .swal2-popup {
+      position: absolute !important;
+      top: 0;
+      border: 1px solid #ccc !important;
+      box-shadow: 0 4px 24px #ccc !important;
+    }
+
+    .swal2-backdrop-show {
+      background: rgba(0, 0, 0, 0) !important;
+    }
+
+    .page-title {
+      visibility: hidden;
+      margin: 0;
+    }
+
+    .create {
+      font-size: 14px;
+    }
+
+    .table-main {
+      margin-top: 10px;
+      border-radius: 30px;
+    }
+    
+    .table-main:hover {
+      border: 1px solid #007bfc;
+    }
+    
+    @font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1604384615769'); /* IE9 */
+  src: url('iconfont.eot?t=1604384615769#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAANkAAsAAAAAB6gAAAMXAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqCfIJGATYCJAMMCwgABCAFhG0HSRufBsgekiQlKEjTJDkAQwAgHujnyveTLCVFoPFIrmyB4I5Vq0kCgLupRYek93/XNCXIdUDyP3/UyqoRqZI++knTw5fLULGfmrFTZhWyE27c3dwPZ32ey+lNPGrb/EA5jjF5Lz7qBRgHFNie2CYrkBLkhrGbKA/iNAGpLnSFWYfnI1KXAJMCwkbBXVJPeSU19UFRkC9ZmQgVcorRsegdcYZ/PnzVC0UiuRiYOXv1QUC2PzT5cDm+K++1nBJ044WhrSPGIERCWFkaXawUZgYpSR1rub48LxFEY8XLZbjWNefhHx6RQMgDtY1APykb8aEJ1sa2y6L+rH8ZgzxK2Ik4MUI/cpJmzdrdupXBvXdoV+50is7eHd30+v2u8bl7y/eeb9Wk7mIo7bvUtmntBcsbHa/ZW5vRE/X76lalgVSkzeM1rZT0b91YbW3WOlEfCll9HTe/kYBUlNlLNb5kR9Ist2Ol2nJ9K0p3aJqO6PE/A77ip/GPbnyMzaYjGmY0jNhTod825yWbt5ZWpAta3HIULd1JRzhcpIVMcxUFWrxdGjXFPnRURa2V3meNE0vGjdspHZ6+baVieOOSKSvRrCKp/2jxQXjShAfz6eLpr4vrklKbV/Nf2QZi8abi33/zHSv/N3q5qumk/8UsAa+fb52vKO9NSLwXRRGtdX9C17IlcQ3AFye2Fmv9fGyjyn1WS6V4/43Qwkd/Z+u7zQVFrWNECjojVtSLTNhByMmMQl7RVKQGOlqfaUkqCUkJAzwLCJp5Q6SJ+4g1MycTdoGcNj6R1yzESC0MLXfM9AnrmjMlugoD8G5A+GnCUEA1g/oB8ovIlUkDl09Q5iIOXdPO5o8wQTnGnPyS95RiwGQaw6FwHkZRCplMZ+grc6pU1rcsVvYi009j0jSThFwKCgDPDSD4UglGOyvN3PsHEHch4pI1vI7mBJJyonfQZbJbkEfWpBXvWi7JXeJ6FIUBjJSKgUMhjCKYSYGsfNgM8immaY9Ups+S2rG2VnN+e/x8uyAFdotDFOKQaLIhTfjtVMTCTTxk1qJYggkv8RACAA==') format('woff2'),
+  url('iconfont.woff?t=1604384615769') format('woff'),
+  url('iconfont.ttf?t=1604384615769') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1604384615769#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-kongzhimianban:before {
+  content: "\e6b3";
+}
+
+.icon-zhinengkongzhi:before {
+  content: "\e60e";
+}
+
+
+  </style>
+</head>
+
+<body>
+  <table class="table-main">
+    <tr>
+      <th>主机状态</th>
+      <td>{$info.status|raw}</td>
+    </tr>
+    <tr>
+        <th>站点使用量</th>
+        <td>
+            {if $info['site_max'] == 0}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+                        不限制大小
+                    </div>
+                </div>
+            {else/}
+            <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+                        {$info.site_size}/{$info.site_max}MB
+                    </div>
+                </div>
+            {/if}
+        </td>
+    </tr>
+    <tr>
+      <th>数据库使用量</th>
+      <td>
+            {if $info['sql_max'] == 0}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        不限制大小
+                    </div>
+                </div>
+            {else/}
+            <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{$info.sql_size}" aria-valuemin="0" aria-valuemax="{$info.sql_max}" style="width: 100%">
+                        {$info.sql_size}/{$info.sql_max}MB
+                    </div>
+                </div>
+            {/if}
+      </td>
+    </tr>
+    <tr>
+      <th>月流量使用量</th>
+      <td>
+            {if $info['flow_max'] == 0}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        不限制大小
+                    </div>
+                </div>
+            {else/}
+            <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{$info.flow_size}" aria-valuemin="0" aria-valuemax="{$info.flow_max}" style="width: 100%">
+                        {$info.flow_size}/{$info.flow_max}MB
+                    </div>
+                </div>
+            {/if}
+      </td>
+    </tr>
+    
+  </table>
+  <script>
+    function ajax(options){
+	    //创建一个ajax对象
+	    var xhr = new XMLHttpRequest() || new ActiveXObject("Microsoft,XMLHTTP");
+	    //数据的处理 {a:1,b:2} a=1&b=2;
+	    if(typeof(options.data)!='string'){
+            var str = "";
+            for(var key in options.data){
+                str+="&"+key+"="+options.data[key];
+            }
+            str = str.slice(1)
+        }else{
+            var str = options.data;
+        }
+	    options.dataType=options.dataType||'json';
+	    if(options.type == "get"){
+	        var url = options.url+"?"+str;
+	        xhr.open("get",url);
+	        xhr.setRequestHeader("Authorization","JWT {$Think.get.jwt}");
+	        xhr.send();
+	    }else if(options.type == "post"){
+	        xhr.open("post",options.url);
+	        xhr.setRequestHeader("content-type","application/x-www-form-urlencoded");
+	        xhr.setRequestHeader("Authorization","JWT {$Think.get.jwt}");
+	        xhr.send(str)
+	    }
+	    //监听
+	    xhr.onreadystatechange = function(){
+	        //当请求成功的时候
+	        if(xhr.readyState == 4 && xhr.status == 200){
+	            var d = xhr.responseText;
+	            d = JSON.parse(d);
+	            //将请求的数据传递给成功回调函数
+	            options.success&&options.success(d,xhr.responseXML)
+	        }else if(xhr.status != 200){
+	            //当失败的时候将服务器的状态传递给失败的回调函数
+	            options.error&&options.error(xhr.status);
+	        }
+	    }
+	}
+	
+  </script>
+</body>
+
+</html>

@@ -190,7 +190,7 @@ class PayController extends CommonController
 				if ($res["credit"] > 0) {
 					\think\Db::name("clients")->where("id", $uid)->setInc("credit", $res["credit"]);
 				}
-				$accounts = \think\Db::name("accounts")->where("invoice_id", $res["id"])->select()->toArray();
+				$accounts = \think\Db::name("accounts")->where("uid", $uid)->where("invoice_id", $res["id"])->select()->toArray();
 				$amount_in = $amount_out = 0;
 				foreach ($accounts as $account) {
 					$amount_in += $account["amount_in"];
@@ -199,6 +199,7 @@ class PayController extends CommonController
 				$credit = $amount_in - $amount_out;
 				if ($credit > 0) {
 					\think\Db::name("clients")->where("id", $uid)->setInc("credit", $credit);
+					\think\Db::name("invoices")->where("id", $res["id"])->update(["status" => "Paid"]);
 				}
 				\think\Db::name("invoices")->where("id", $res["id"])->update(["is_delete" => 1]);
 			}

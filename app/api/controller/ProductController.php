@@ -614,6 +614,14 @@ class ProductController
             $v = [];
         }
 
+        $logic = new \app\common\logic\Product();
+        $tmp = $logic->getDetailCache($id);
+        if (empty($tmp)) {
+            $logic->updateDetailCache([$id]);
+            $tmp = $logic->getDetailCache($id);
+        }
+        $v["customfields"] = $tmp[$id]["customfields"] ?? [];
+
         return json([
             'status' => 200,
             'msg' => '请求成功',

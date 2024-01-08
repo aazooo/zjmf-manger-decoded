@@ -316,7 +316,7 @@ class HostController
 		$tid = $params["tid"];
 		$info = \think\Db::name("ticket")->where("upstream_tid", $tid)->where("merged_ticket_id", 0)->find();
 		$id = $info["id"];
-		if (empty($info)) {
+		if (empty($tid) || empty($info)) {
 			$result["status"] = 406;
 			$result["msg"] = lang("ID_ERROR");
 			return jsonrule($result);
@@ -396,7 +396,7 @@ class HostController
 		$tid = $params["id"];
 		$info = \think\Db::name("ticket")->where("id", $tid)->where("merged_ticket_id", 0)->find();
 		$id = $info["id"];
-		if (empty($info) || empty($info["token"])) {
+		if (empty($tid) || empty($info) || empty($info["token"])) {
 			$result["status"] = 406;
 			$result["msg"] = lang("ID_ERROR");
 			return jsonrule($result);
